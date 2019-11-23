@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#FFBE1E</color>
-    <color name="colorAccent">#494947</color>
-    <color name="gray">#BEBEBE</color>
+    <color name="colorPrimaryDark">#947D66</color>
+    <color name="colorSecondary">#786553</color>
+    <color name="colorAccent">#536878</color>
+    <color name="gray">#d3d3d3</color>
+    <color name="Facebook">#1877F2</color>
 </resources>

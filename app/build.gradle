@@ -41,5 +41,8 @@ dependencies {
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     annotationProcessor 'androidx.room:room-compiler:2.2.0'
     implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
+    implementation 'com.facebook.android:facebook-login:[5,6)'
+    implementation 'com.github.medyo:fancybuttons:1.9.1'
     testImplementation 'junit:junit:4.12'
 }
