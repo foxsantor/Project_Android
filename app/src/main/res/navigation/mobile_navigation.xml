@@ -26,15 +26,27 @@
         android:id="@+id/navigation_account"
         android:name="com.example.projeecto.ui.dashboard.DashboardFragment"
         android:label="@string/title_account"
-        tools:layout="@layout/fragment_dashboard">
-
-    </fragment>
+        tools:layout="@layout/fragment_dashboard"/>
 
     <fragment
         android:id="@+id/navigation_settings"
         android:name="com.example.projeecto.ui.home.HomeFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_home">
+    </fragment>
+    <fragment
+        android:id="@+id/user_account"
+        android:name="com.example.projeecto.User_account"
+        android:label="user_account_fragment"
+        tools:layout="@layout/user_account_fragment" />
+    <fragment
+        android:id="@+id/emptyfragi"
+        android:name="com.example.projeecto.emptyfragi"
+        android:label="emptyfragi_fragment"
+        tools:layout="@layout/emptyfragi_fragment" >
+        <action
+            android:id="@+id/action_emptyfragi_to_user_account"
+            app:destination="@id/user_account" />
     </fragment>
 
 </navigation>

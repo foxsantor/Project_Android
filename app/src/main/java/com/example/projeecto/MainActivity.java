@@ -1,5 +1,7 @@
 package com.example.projeecto;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -16,7 +18,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
-
+    private String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -38,5 +40,6 @@ public class MainActivity extends AppCompatActivity {
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable( Color.parseColor("#947D66")));
     }
+
 
 }
