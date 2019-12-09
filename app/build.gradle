@@ -5,6 +5,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
+
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
         applicationId "com.example.projeecto"
         minSdkVersion 15
@@ -46,5 +47,7 @@ dependencies {
     implementation 'com.facebook.android:facebook-login:[5,6)'
     implementation 'com.github.medyo:fancybuttons:1.9.1'
     implementation 'com.mcxiaoke.volley:library:1.0.19'
+    implementation 'net.steamcrafted:materialiconlib:1.1.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
     testImplementation 'junit:junit:4.12'
 }

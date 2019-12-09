@@ -11,6 +11,9 @@
         android:label="@string/title_home"
         tools:layout="@layout/fragment_notifications">
 
+        <action
+            android:id="@+id/action_navigation_market_place_to_viewalone"
+            app:destination="@id/viewalone" />
     </fragment>
 
     <fragment
@@ -24,9 +27,17 @@
 
     <fragment
         android:id="@+id/navigation_account"
-        android:name="com.example.projeecto.ui.dashboard.DashboardFragment"
+        android:name="com.example.projeecto.ui.dashboard.AuthenticationFragment"
         android:label="@string/title_account"
-        tools:layout="@layout/fragment_dashboard"/>
+        tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/action_navigation_account_to_registerFragment_1"
+            app:destination="@id/registerFragment_1" />
+        <action
+            android:id="@+id/action_navigation_account_to_emptyfragi"
+            app:destination="@id/emptyfragi"
+            app:popUpTo="@+id/emptyfragi" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_settings"
@@ -41,12 +52,37 @@
         tools:layout="@layout/user_account_fragment" />
     <fragment
         android:id="@+id/emptyfragi"
-        android:name="com.example.projeecto.emptyfragi"
+        android:name="com.example.projeecto.UserMenuFragment"
         android:label="emptyfragi_fragment"
         tools:layout="@layout/emptyfragi_fragment" >
         <action
             android:id="@+id/action_emptyfragi_to_user_account"
-            app:destination="@id/user_account" />
+            app:destination="@id/user_account"
+            app:enterAnim="@anim/nav_default_pop_enter_anim"
+            app:exitAnim="@anim/nav_default_pop_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@+id/emptyfragi"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_emptyfragi_to_add_part_fragment"
+            app:destination="@id/add_part_fragment"
+            app:popUpTo="@+id/emptyfragi" />
     </fragment>
+    <fragment
+        android:id="@+id/registerFragment_1"
+        android:name="com.example.projeecto.RegisterFragment_1"
+        android:label="fragment_register_fragment_1"
+        tools:layout="@layout/fragment_register_fragment_1" />
+    <fragment
+        android:id="@+id/viewalone"
+        android:name="com.example.projeecto.Viewalone"
+        android:label="fragment_viewalone"
+        tools:layout="@layout/fragment_viewalone" />
+    <fragment
+        android:id="@+id/add_part_fragment"
+        android:name="com.example.projeecto.add_part_fragment"
+        android:label="add_part_fragment"
+        tools:layout="@layout/add_part_fragment" />
 
 </navigation>
