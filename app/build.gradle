@@ -25,6 +25,10 @@ android {
 dependencies {
     def lifecycle_version = "2.1.0"
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation('io.socket:socket.io-client:1.0.0') {
+        // excluding org.json which is provided by Android
+        exclude group: 'org.json', module: 'json'
+    }
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'

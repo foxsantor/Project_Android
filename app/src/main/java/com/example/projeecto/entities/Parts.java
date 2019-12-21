@@ -18,6 +18,7 @@ public class Parts {
     private byte[] image;
     private String owner;
     private String state;
+    private String StatusSell;
 
     @Override
     public boolean equals(Object o) {
@@ -58,7 +59,39 @@ public class Parts {
         super();
     }
 
-    public Parts(String owner,String name, String refrence, String other1, String other2, String other3, String created, String ending_date, Float price, String type, String tag_desc, byte[]  image) {
+    public Parts(int id, String name, String refrence, String other1, String other2, String other3, String created, String type, String tag_desc, byte[] image, String owner, String state,String StatusSell) {
+        this.id = id;
+        this.name = name;
+        this.refrence = refrence;
+        this.other1 = other1;
+        this.other2 = other2;
+        this.other3 = other3;
+        this.created = created;
+        Type = type;
+        this.tag_desc = tag_desc;
+        this.image = image;
+        this.owner = owner;
+        this.state = state;
+        this.StatusSell =StatusSell;
+    }
+    public Parts(int id, String name, String refrence, String other1, String other2, String other3, String created, String type, String tag_desc, byte[] image, String owner, String state,String StatusSell,Float price) {
+        this.id = id;
+        this.name = name;
+        this.refrence = refrence;
+        this.other1 = other1;
+        this.other2 = other2;
+        this.other3 = other3;
+        this.created = created;
+        Type = type;
+        this.tag_desc = tag_desc;
+        this.image = image;
+        this.owner = owner;
+        this.state = state;
+        this.StatusSell =StatusSell;
+        this.price = price;
+    }
+
+    public Parts(String owner, String name, String refrence, String other1, String other2, String other3, String created, String ending_date, Float price, String type, String tag_desc, byte[]  image) {
         this.name = name;
         this.refrence = refrence;
         this.other1 = other1;
@@ -201,5 +234,13 @@ public class Parts {
 
     public void setImage(byte[]  image) {
         this.image = image;
+    }
+
+    public String getStatusSell() {
+        return StatusSell;
+    }
+
+    public void setStatusSell(String statusSell) {
+        StatusSell = statusSell;
     }
 }

@@ -6,17 +6,6 @@
     app:startDestination="@id/navigation_market_place">
 
     <fragment
-        android:id="@+id/navigation_market_place"
-        android:name="com.example.projeecto.ui.notifications.NotificationsFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_notifications">
-
-        <action
-            android:id="@+id/action_navigation_market_place_to_viewalone"
-            app:destination="@id/viewalone" />
-    </fragment>
-
-    <fragment
         android:id="@+id/navigation_bookmarks"
         android:name="com.example.projeecto.ui.home.HomeFragment"
         android:label="@string/title_bookmarks"
@@ -62,12 +51,10 @@
             app:exitAnim="@anim/nav_default_pop_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/emptyfragi"
-            app:popUpToInclusive="false" />
-        <action
-            android:id="@+id/action_emptyfragi_to_add_part_fragment"
-            app:destination="@id/add_part_fragment"
             app:popUpTo="@+id/emptyfragi" />
+        <action
+            android:id="@+id/action_emptyfragi_to_myGarage_fragment"
+            app:destination="@id/myGarage_fragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment_1"
@@ -75,14 +62,54 @@
         android:label="fragment_register_fragment_1"
         tools:layout="@layout/fragment_register_fragment_1" />
     <fragment
-        android:id="@+id/viewalone"
-        android:name="com.example.projeecto.Viewalone"
-        android:label="fragment_viewalone"
-        tools:layout="@layout/fragment_viewalone" />
-    <fragment
         android:id="@+id/add_part_fragment"
         android:name="com.example.projeecto.add_part_fragment"
         android:label="add_part_fragment"
         tools:layout="@layout/add_part_fragment" />
+    <fragment
+        android:id="@+id/myGarage_fragment"
+        android:name="com.example.projeecto.myGarage_fragment"
+        android:label="fragment_my_garage_fragment"
+        tools:layout="@layout/fragment_my_garage_fragment" >
+        <action
+            android:id="@+id/action_myGarage_fragment_to_add_part_fragment"
+            app:destination="@id/add_part_fragment" />
+        <action
+            android:id="@+id/action_myGarage_fragment_to_mypartView"
+            app:destination="@id/mypartView" />
+    </fragment>
+    <fragment
+        android:id="@+id/mypartView"
+        android:name="com.example.projeecto.MypartView"
+        android:label="fragment_mypart_view"
+        tools:layout="@layout/fragment_mypart_view" />
+    <fragment
+        android:id="@+id/navigation_market_place"
+        android:name="com.example.projeecto.HomeFragmment"
+        android:label="@string/title_home"
+        tools:layout="@layout/home_fragmment"/>
+    <fragment
+        android:id="@+id/viewalone"
+        android:name="com.example.projeecto.Viewalone"
+        android:label="fragment_viewalone"
+        tools:layout="@layout/fragment_viewalone" >
+        <action
+            android:id="@+id/action_viewalone_to_contactInterface"
+            app:destination="@id/contactInterface" />
+    </fragment>
+    <fragment
+        android:id="@+id/liveChat2"
+        android:name="com.example.projeecto.LiveChat"
+        android:label="fragment_live_chat"
+        tools:layout="@layout/fragment_live_chat" />
+    <fragment
+        android:id="@+id/contactInterface"
+        android:name="com.example.projeecto.ContactInterface"
+        android:label="fragment_contact_interface"
+        tools:layout="@layout/fragment_contact_interface" >
+        <action
+            android:id="@+id/action_contactInterface_to_liveChat2"
+            app:destination="@id/liveChat2" />
+    </fragment>
 
 </navigation>

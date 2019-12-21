@@ -68,7 +68,7 @@ public class UserMenuFragment extends Fragment implements OnbackDestrecution {
         myGarage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(getView()).navigate(R.id.action_emptyfragi_to_add_part_fragment);
+                Navigation.findNavController(getView()).navigate(R.id.action_emptyfragi_to_myGarage_fragment);
             }
         });
     }

@@ -162,6 +162,8 @@ public class firstrowFragment extends Fragment implements OnbackDestrecution {
 
                 NavHostFragment navHostFragment = (NavHostFragment) getParentFragment();
                 Fragment parent = (Fragment) navHostFragment.getParentFragment();
+
+
                 resetEditText(firstname_l,lastname_l,mobilephone_l);
                 if(!validateEmpty(firstname_l,"First name") | !validateEmpty(lastname_l,"Last name") | !validateEmpty(mobilephone_l,"Mobile phone") ) {return;}else{
                     saveDataRegister(firstname_l.getEditText().getText().toString(), lastname_l.getEditText().getText().toString(), mobilephone_l.getEditText().getText().toString(), address.getText().toString());

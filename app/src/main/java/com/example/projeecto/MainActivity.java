@@ -3,6 +3,8 @@ package com.example.projeecto;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.widget.Toast;
 
 import com.example.projeecto.tools.Dialogue;
 import com.example.projeecto.tools.OnbackDestrecution;
@@ -20,7 +22,7 @@ import androidx.navigation.ui.NavigationUI;
 public class MainActivity extends AppCompatActivity  {
     private String username;
     private NavHostFragment mNavHostFragment;
-    public static final String SKELETON = "http://192.168.1.5:5000/api/";
+    public static final String SKELETON = "http://192.168.1.5:5000/api/"; //"http://192.168.43.242:5000/api/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -41,8 +43,9 @@ public class MainActivity extends AppCompatActivity  {
 
 
         ActionBar bar = getSupportActionBar();
-        bar.setBackgroundDrawable(new ColorDrawable( Color.parseColor("#947D66")));
+        bar.setBackgroundDrawable(new ColorDrawable( Color.parseColor("#d1d5e0")));
     }
+
 
 
 
