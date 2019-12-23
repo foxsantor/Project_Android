@@ -475,12 +475,12 @@
                 android:backgroundTint="@color/browser_actions_bg_grey"
                 android:clickable="true"
                 android:elevation="4dp"
-                android:tint="@color/colorAccent"
-                app:backgroundTint="@color/browser_actions_bg_grey"
+                app:backgroundTint="@color/DrakLord"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/cardView"
                 app:layout_constraintTop_toBottomOf="@+id/othersets"
+                app:rippleColor="@color/colorPrimary"
                 app:srcCompat="@drawable/ic_photo_camera_accent_24dp" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -495,11 +495,11 @@
                 android:backgroundTint="@color/browser_actions_bg_grey"
                 android:clickable="true"
                 android:elevation="4dp"
-                android:tint="@color/colorAccent"
-                app:backgroundTint="@color/browser_actions_bg_grey"
+                app:backgroundTint="@color/DrakLord"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cardView"
                 app:layout_constraintTop_toBottomOf="@+id/seealone"
+                app:rippleColor="@color/colorPrimary"
                 app:srcCompat="@drawable/ic_insert_photo_black_24dp" />
 
             <EditText
@@ -535,6 +535,7 @@
                 android:gravity="center|center_horizontal|center_vertical"
                 android:text="Add PART "
                 android:textColor="@color/colorPrimary"
+                app:backgroundTint="@color/DrakLord"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

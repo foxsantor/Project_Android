@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.projeecto.R;
 import com.example.projeecto.entities.Parts;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class sellsAdapter extends RecyclerView.Adapter<sellsAdapter.SellsViewHol
         String other2 = currentItem.getOther2();
         String other3 = currentItem.getOther3();
         String type = currentItem.getType();
+        String vues = String.valueOf(currentItem.getVues());
         //image Reader
         byte[] image = currentItem.getImage();
         Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
@@ -123,6 +125,7 @@ public class sellsAdapter extends RecyclerView.Adapter<sellsAdapter.SellsViewHol
         holder.mTextViewType.setText(type);
         holder.mImageView.setImageBitmap(bmp);
         holder.mTextViewOwner.setText(owner);
+        holder.views.setText(vues);
 
         //Picasso.with(mContext).load(imageUrl).fit().centerInside().into(holder.mImageView);
     }
@@ -134,8 +137,8 @@ public class sellsAdapter extends RecyclerView.Adapter<sellsAdapter.SellsViewHol
 
     public class SellsViewHolder extends RecyclerView.ViewHolder {
         public ImageView mImageView;
-        public TextView mTextViewName,mTextViewPrice,mTextViewOwner,mTextViewOther1,mTextViewOther2,mTextViewOther3,mTextViewType;
-        public FloatingActionButton viewAlone;
+        public TextView mTextViewName,mTextViewPrice,mTextViewOwner,mTextViewOther1,mTextViewOther2,mTextViewOther3,mTextViewType,views;
+        public MaterialButton viewAlone;
 
 
         public SellsViewHolder(View itemView) {
@@ -156,6 +159,7 @@ public class sellsAdapter extends RecyclerView.Adapter<sellsAdapter.SellsViewHol
             mTextViewOther1 = itemView.findViewById(R.id.other1t);
             mTextViewOther2 = itemView.findViewById(R.id.other2t);
             mTextViewOther3 = itemView.findViewById(R.id.other3t);
+            views = itemView.findViewById(R.id.textView35);
 
             viewAlone.setOnClickListener(new View.OnClickListener() {
                 @Override

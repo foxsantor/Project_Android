@@ -1,6 +1,7 @@
 package com.example.projeecto.entities;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Comment {
@@ -12,9 +13,15 @@ public class Comment {
     private String text;
     private String username;
     private Date created;
+    private Votes checker;
+    public ArrayList<Votes> votes;
+    public Votes getChecker() {
+        return checker;
+    }
 
-
-
+    public void setChecker(Votes checker) {
+        this.checker = checker;
+    }
 
     public Comment(int idComment, int vote) {
         this.idComment = idComment;
@@ -24,13 +31,14 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(int idComment,int idDeal, int vote, String text, String username, Date created) {
+    public Comment(int idComment,int idDeal, int vote, String text, String username, Date created,ArrayList<Votes> votes) {
         this.idComment= idComment;
         this.idDeal = idDeal;
         this.vote = vote;
         this.text = text;
         this.username = username;
         this.created = created;
+        this.votes =votes;
     }
 
     public Date getCreated() {

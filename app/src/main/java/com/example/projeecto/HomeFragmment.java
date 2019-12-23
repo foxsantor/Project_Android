@@ -22,6 +22,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,7 +31,7 @@ import android.widget.Toast;
 public class HomeFragmment extends Fragment {
 
 
-    private EditText search;
+    private TextInputLayout search;
     private Button clear;
     private boolean exit = false;
     private String saver ="" ;
@@ -87,25 +89,25 @@ public class HomeFragmment extends Fragment {
 
 
         search = view.findViewById(R.id.search);
-        clear = view.findViewById(R.id.clear);
+        /*clear = view.findViewById(R.id.clear);
 
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                search.setText(null);
+                search.getEditText().setText(null);
             }
         });
-
+*/
 
         search.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
 
-                    if(!saver.equals(search.getText().toString()))
+                    if(!saver.equals(search.getEditText().getText().toString()))
                     {
                     Bundle searchData = new Bundle();
-                    searchData.putString("search",search.getText().toString());
+                    searchData.putString("search",search.getEditText().getText().toString());
                     Navigation.findNavController(getActivity(), R.id.fragichan).navigate(R.id.searchFragment2,searchData);
                     }else if(saver.equals(""))
                     {
@@ -119,7 +121,7 @@ public class HomeFragmment extends Fragment {
             }
         });
 
-        search.addTextChangedListener(new TextWatcher() {
+        search.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -127,16 +129,16 @@ public class HomeFragmment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(search.getText().toString().isEmpty())
+                if(search.getEditText().getText().toString().isEmpty())
                 {
-                    clear.setVisibility(View.GONE);
+                    //clear.setVisibility(View.GONE);
                     Navigation.findNavController(getActivity(), R.id.fragichan).navigate(R.id.searchFragment2);
                 }else
                 {
-                    clear.setVisibility(View.VISIBLE);
-                    saver = search.getText().toString();
+                    //clear.setVisibility(View.VISIBLE);
+                    saver = search.getEditText().getText().toString();
                     Bundle searchData = new Bundle();
-                    searchData.putString("search",search.getText().toString());
+                    searchData.putString("search",search.getEditText().getText().toString());
                     Navigation.findNavController(getActivity(), R.id.fragichan).navigate(R.id.searchFragment2,searchData);
                 }
 

@@ -1,12 +1,14 @@
 package com.example.projeecto;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -15,6 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +32,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -40,12 +45,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
+import com.example.projeecto.ViewModels.BookmarkViewModel;
 import com.example.projeecto.adapters.CommentAdapter;
 import com.example.projeecto.adapters.myPartsAdapter;
 import com.example.projeecto.adapters.sellsAdapter;
 import com.example.projeecto.entities.Comment;
 import com.example.projeecto.entities.Parts;
+import com.example.projeecto.entities.Votes;
 import com.example.projeecto.tools.OnbackDestrecution;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
@@ -54,6 +62,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,58 +72,57 @@ import java.util.HashMap;
 
 public class Viewalone extends Fragment implements OnbackDestrecution {
 
-    TextView Created,name,owner,other1,other2,other3,refrence,tag_description,price,type,other1_v,other2_v,other3_v,portrait;
+    TextView Created, name, owner, other1, other2, other3, refrence, tag_description, price, type, other1_v, other2_v, other3_v, portrait;
     FloatingActionButton shopping;
-    ConstraintLayout other1c,other2c,other3c,appear;
-    Button commentSender,Contact,I,B;
-    String other1s,other2s,other3s,username;
+    ConstraintLayout other1c, other2c, other3c, appear, loading1;
+    Button commentSender, Contact, I, B;
+    String other1s, other2s, other3s, username;
+    private BookmarkViewModel bookmarkViewModel;
     private ArrayList<Comment> commentList;
+    private ArrayList<Votes> votesList;
     private CommentAdapter adapter;
     private RecyclerView mRecyclerView;
+    private static int focus = 0;
+    private static int X,Y;
+
+    private static Votes checky;
     EditText comment;
     ImageView imageView;
-    RequestQueue requestQueue;
-    private static final String URL = MainActivity.SKELETON+"comments/getComments";
-    private static final String URL_ADD = MainActivity.SKELETON+"comments/addComment";
-    private static final String URL_vote = MainActivity.SKELETON+"comments/UpdateVotes";
-    private static final String URL_checker = MainActivity.SKELETON+"comments/checkVoter";
+    RequestQueue requestQueue,requestQueue1;
+    private static final String URL = MainActivity.SKELETON + "comments/getComments";
+    private static final String URL_ADD = MainActivity.SKELETON + "comments/addComment";
+    private static final String URL_vote = MainActivity.SKELETON + "comments/UpdateVotes";
+    private static final String URL_checker = MainActivity.SKELETON + "comments/checkVoter";
     private int idDeal;
+
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_viewalone, container, false);
+        View view = inflater.inflate(R.layout.fragment_viewalone, container, false);
         OnbackDestrecution();
-
-
-        return root;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        OnbackDestrecution();
-        //init
-        Created =view.findViewById(R.id.date_a);
+        Created = view.findViewById(R.id.date_a);
         Contact = view.findViewById(R.id.Contact);
         other1c = view.findViewById(R.id.other1);
         other2c = view.findViewById(R.id.other2);
         other3c = view.findViewById(R.id.other3);
         other1_v = view.findViewById(R.id.other1v);
         other2_v = view.findViewById(R.id.other2v);
+        loading1 = view.findViewById(R.id.loading_1);
         other3_v = view.findViewById(R.id.otherv);
-        name  =view.findViewById(R.id.name_a);
-        owner  =view.findViewById(R.id.ownert);
-        other1  =view.findViewById(R.id.other1t);
-        other2 =view.findViewById(R.id.other2t);
-        other3 =view.findViewById(R.id.other3t);
-        refrence =view.findViewById(R.id.refrencet);
-        tag_description =view.findViewById(R.id.textView24);
-        price  =view.findViewById(R.id.textView17);
-        type=view.findViewById(R.id.textView19);
-        shopping =view.findViewById(R.id.Addtofavorite);
+        name = view.findViewById(R.id.name_a);
+        owner = view.findViewById(R.id.ownert);
+        other1 = view.findViewById(R.id.other1t);
+        other2 = view.findViewById(R.id.other2t);
+        other3 = view.findViewById(R.id.other3t);
+        refrence = view.findViewById(R.id.refrencet);
+        tag_description = view.findViewById(R.id.textView24);
+        price = view.findViewById(R.id.textView17);
+        type = view.findViewById(R.id.textView19);
+        shopping = view.findViewById(R.id.Addtofavorite);
         imageView = view.findViewById(R.id.imageView4);
         mRecyclerView = view.findViewById(R.id.comments);
-        comment =view.findViewById(R.id.comment);
+        comment = view.findViewById(R.id.comment);
         appear = view.findViewById(R.id.appear);
         portrait = view.findViewById(R.id.portrait);
         commentSender = view.findViewById(R.id.send);
@@ -122,89 +130,108 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
         I = view.findViewById(R.id.I);
         B = view.findViewById(R.id.B);
         Bundle data = getArguments();
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        commentList = new ArrayList<>();
+        votesList = new ArrayList<>();
 
-        if(null!= data) {
+        shopping.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveDeal();
+            }
+        });
 
-            other1s=data.getString("other1");
-            other2s=data.getString("other2");
-            other3s= data.getString("other3");
 
-            if(other1s.isEmpty())
-            {
+
+        if (null != data) {
+
+            other1s = data.getString("other1");
+            other2s = data.getString("other2");
+            other3s = data.getString("other3");
+
+            if (other1s.isEmpty()) {
                 this.other1c.setVisibility(View.GONE);
-            }else
-            {
-                if(other1s.contains(",")){
+            } else {
+                if (other1s.contains(",")) {
                     String[] other1TextView;
                     other1TextView = other1s.split(",");
                     other1_v.setText(other1TextView[0]);
-                    other1.setText(other1TextView[1]);}
-                else {
+                    other1.setText(other1TextView[1]);
+                } else {
                     other1.setText(other1s);
                 }
             }
-            if(other2s.isEmpty())
-            {
+            if (other2s.isEmpty()) {
                 this.other2c.setVisibility(View.GONE);
-            }else
-            {
-                if(other2s.contains(",")){
+            } else {
+                if (other2s.contains(",")) {
                     String[] other2TextView;
                     other2TextView = other2s.split(",");
                     other2_v.setText(other2TextView[0]);
-                    other2.setText(other2TextView[1]);}
-                else {
+                    other2.setText(other2TextView[1]);
+                } else {
                     other2.setText(other2s);
                 }
             }
-            if(other3s.isEmpty())
-            {
+            if (other3s.isEmpty()) {
                 this.other3c.setVisibility(View.GONE);
-            }else
-            {
-                if(other3s.contains(",")){
+            } else {
+                if (other3s.contains(",")) {
                     String[] other3TextView;
                     other3TextView = other3s.split(",");
                     other3_v.setText(other3TextView[0]);
-                    other3.setText(other3TextView[1]);}
-                else {
+                    other3.setText(other3TextView[1]);
+                } else {
                     other3.setText(other3s);
                 }
             }
 
-            if(this.other1c.getVisibility() == View.GONE )
-            {
-                this.other2c.setBackgroundDrawable(new ColorDrawable( Color.parseColor("#FFFFFF")));
-                this.other3c.setBackgroundDrawable(new ColorDrawable( Color.parseColor("#E6E9F0")));
+            if (this.other1c.getVisibility() == View.GONE) {
+                this.other2c.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
+                this.other3c.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#E6E9F0")));
             }
-            if(this.other2c.getVisibility() == View.GONE  )
-            {
-                this.other3c.setBackgroundDrawable(new ColorDrawable( Color.parseColor("#E6E9F0")));
+            if (this.other2c.getVisibility() == View.GONE) {
+                this.other3c.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#E6E9F0")));
             }
-            if(this.other2c.getVisibility() == View.GONE  && this.other1c.getVisibility() == View.GONE )
-            {
-                this.other3c.setBackgroundDrawable(new ColorDrawable( Color.parseColor("#FFFFFF")));
+            if (this.other2c.getVisibility() == View.GONE && this.other1c.getVisibility() == View.GONE) {
+                this.other3c.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
             }
 
             Created.setText(data.getString("Created"));
             name.setText(data.getString("name"));
             owner.setText(data.getString("owner"));
-            idDeal = data.getInt("idparts",0);
+            idDeal = data.getInt("idparts", 0);
+            checkVoter(idDeal);
             getComments(idDeal);
+
             refrence.setText(data.getString("refrnce"));
             tag_description.setText(data.getString("tag_description"));
-            price.setText(data.getFloat("price")+ " TND");
+            price.setText(data.getFloat("price") + " TND");
             type.setText(data.getString("Type"));
             byte[] image = data.getByteArray("image");
             Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
             imageView.setImageBitmap(bmp);
 
         }
+
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        OnbackDestrecution();
+
+
+        //init
+
         I.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String current_comment = comment.getText().toString();
-                current_comment = "<i>"+current_comment+"</i>";
+                current_comment = "<i>" + current_comment + "</i>";
                 comment.setText(current_comment);
             }
         });
@@ -212,7 +239,7 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
             @Override
             public void onClick(View v) {
                 String current_comment = comment.getText().toString();
-                current_comment = "<b>"+current_comment+"</b>";
+                current_comment = "<b>" + current_comment + "</b>";
                 comment.setText(current_comment);
             }
         });
@@ -220,14 +247,12 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                appear.setVisibility(View.VISIBLE);
+                    appear.setVisibility(View.VISIBLE);
                 }
-                if(!validateEmpty(comment))
-                {
+                if (!validateEmpty(comment)) {
                     commentSender.setClickable(false);
                     commentSender.setBackgroundResource(R.drawable.editblend);
-                }else
-                {
+                } else {
                     commentSender.setClickable(true);
                     commentSender.setBackgroundResource(R.drawable.blenddarker);
 
@@ -244,12 +269,10 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!validateEmpty(comment))
-                {
+                if (!validateEmpty(comment)) {
                     commentSender.setClickable(false);
                     commentSender.setBackgroundResource(R.drawable.editblend);
-                }else
-                {
+                } else {
                     commentSender.setClickable(true);
                     commentSender.setBackgroundResource(R.drawable.blenddarker);
 
@@ -265,46 +288,40 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
         commentSender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addComment(comment.getText().toString(),username,idDeal);
+                addComment(comment.getText().toString(), username, idDeal);
+                adapter.notifyDataSetChanged();
 
             }
         });
 
 
 
-
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        commentList = new ArrayList<>();
 
         Contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle data = new Bundle();
-                data.putString("owner",owner.getText().toString());
-                data.putString("price",price.getText().toString());
-                data.putString("name",name.getText().toString());
-                Navigation.findNavController(getView()).navigate(R.id.action_viewalone_to_contactInterface,data);
+                data.putString("owner", owner.getText().toString());
+                data.putString("price", price.getText().toString());
+                data.putString("name", name.getText().toString());
+                Navigation.findNavController(getView()).navigate(R.id.action_viewalone_to_contactInterface, data);
             }
         });
-
-
-
 
 
     }
 
     @Override
     public void OnbackDestrecution() {
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
 
     }
 
-    private void getComments(int idParts) {
+    private void getComments(final int idParts) {
+        loading1.setVisibility(View.VISIBLE);
 
-        OnbackDestrecution();
         requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.start();
 
@@ -325,7 +342,7 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
                                 for (int i = 0; i < response.length(); i++) {
 
                                     JSONObject hit = response.getJSONObject(i);
-                                    int idComments = hit.getInt("idcomments");
+                                     int idComments = hit.getInt("idcomments");
                                     String firstname = hit.getString("firstname");
                                     String lastname = hit.getString("lastname");
                                     String username = hit.getString("username");
@@ -334,31 +351,76 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
                                     int dealid = hit.getInt("dealid");
                                     int state = hit.getInt("state");
                                     String created = hit.getString("created");
+
+
                                     Date date = new Date();
                                     try {
-                                         date = parse(created);
-                                    }catch (Exception e) { e.printStackTrace();}
+                                        date = parse(created);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
 
-                                    if(state != 1)
-                                    commentList.add( new Comment(idComments,dealid,votes,text,lastname+" "+firstname,date));
-                                      }
+                                    if (state != 1)
+                                        commentList.add(new Comment(idComments, dealid, votes, text, lastname + " " + firstname, date, votesList));
+                                }
 
-                                adapter = new CommentAdapter(getActivity(), commentList, checkVoter(), new CommentAdapter.OnClickedListner() {
+                                adapter = new CommentAdapter(getActivity(), commentList, new CommentAdapter.OnClickedListner() {
                                     @Override
-                                    public void upvVote(View v, int position) {
+                                    public void upvVote(final View v, int position) {
 
-                                        UpadateVotes(commentList.get(position).getIdComment(),username,"up");
+                                        UpadateVotes(commentList.get(position).getIdComment(), username, "up");
+                                        focus =1;
+                                        ViewTreeObserver vto=v.getViewTreeObserver();
+                                        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                            @Override
+                                            public void onGlobalLayout() {
+                                                int[] location = new int[2];
+                                                v.getLocationOnScreen(location);
+                                                X = location[0];
+                                                Y = location[1];
+                                                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                                            }
+                                        });
+
+                                        Bundle data =getArguments();
+                                        Navigation.findNavController(getView()).navigate(R.id.viewalone, data);
+
+
 
                                     }
 
                                     @Override
-                                    public void downvVote(View v, int position) {
+                                    public void downvVote(final View v, int position) {
 
-                                        UpadateVotes(commentList.get(position).getIdComment(),username,"down");
+                                        UpadateVotes(commentList.get(position).getIdComment(), username, "down");
+                                        focus =1;
+                                        ViewTreeObserver vto=v.getViewTreeObserver();
+                                        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                            @Override
+                                            public void onGlobalLayout() {
+                                                int[] location = new int[2];
+                                                v.getLocationOnScreen(location);
+                                                X = location[0];
+                                                Y = location[1];
+                                                Toast.makeText(getActivity(), ""+X+""+Y, Toast.LENGTH_SHORT).show();
+                                                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                                            }
+                                        });
+                                        Bundle data =getArguments();
+                                        Navigation.findNavController(getView()).navigate(R.id.viewalone, data);
+
 
                                     }
+
                                 });
+
+
                                 mRecyclerView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
+                                loading1.setVisibility(View.GONE);
+
+
+
                                 //loadingBar.setVisibility(View.GONE);
                             }
                         } catch (JSONException e) {
@@ -369,8 +431,7 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if(error.getMessage().contains("failed"))
-                {
+                if (error.getMessage().contains("failed")) {
                     return;
                 }
                 Toast.makeText(getActivity(), "Connection Lost " + error, Toast.LENGTH_LONG).show();
@@ -380,37 +441,43 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
         });
 
         requestQueue.add(jsObjRequest);
+
+
     }
 
-    public static Date parse(String input ) throws java.text.ParseException {
+    public static Date parse(String input) throws java.text.ParseException {
 
         //NOTE: SimpleDateFormat uses GMT[-+]hh:mm for the TZ which breaks
         //things a bit.  Before we go on we have to repair this.
-        SimpleDateFormat df = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ssz" );
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
 
         //this is zero time so we need to add that TZ indicator for
-        if ( input.endsWith( "Z" ) ) {
-            input = input.substring( 0, input.length() - 1) + "GMT-00:00";
+        if (input.endsWith("Z")) {
+            input = input.substring(0, input.length() - 1) + "GMT-00:00";
         } else {
             int inset = 6;
 
-            String s0 = input.substring( 0, input.length() - inset );
-            String s1 = input.substring( input.length() - inset, input.length() );
+            String s0 = input.substring(0, input.length() - inset);
+            String s1 = input.substring(input.length() - inset, input.length());
 
             input = s0 + "GMT" + s1;
         }
 
-        return df.parse( input );
+        return df.parse(input);
 
     }
 
-    private void addComment(String text,String username,int idParts)
-    {
+    private void addComment(String text, String username, int idParts) {
+        loading1.setVisibility(View.VISIBLE);
+        requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.start();
         //loading.setVisibility(View.VISIBLE);
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("text", text);
         params.put("username", username);
         params.put("dealid", Integer.toString(idParts));
+
+
         // the entered data as the JSON body.
         JsonObjectRequest jsObjRequest = new
                 JsonObjectRequest(Request.Method.POST,
@@ -419,15 +486,14 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            if(response.has("success")) {
+                            if (response.has("success")) {
 
                                 //loading.setVisibility(View.GONE);
-                                Toast.makeText(getActivity(), ""+response.getString("success"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "" + response.getString("success"), Toast.LENGTH_SHORT).show();
                                 //openDialogue();
-                            }
-                            else
-                            {
-                                Toast.makeText(getActivity(), " internal error happened "+response.getString("error"), Toast.LENGTH_SHORT).show();
+                                loading1.setVisibility(View.GONE);
+                            } else {
+                                Toast.makeText(getActivity(), " internal error happened " + response.getString("error"), Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
 
@@ -442,29 +508,30 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
             }
         });
         requestQueue.add(jsObjRequest);
+
     }
-    public  String loadUsername()
-    {
-        SharedPreferences sharedPreferences=this.getActivity().getSharedPreferences("share", Context.MODE_PRIVATE);
-        username = sharedPreferences.getString("email","");
+
+    public String loadUsername() {
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("share", Context.MODE_PRIVATE);
+        username = sharedPreferences.getString("email", "");
         return username;
     }
-    private boolean validateEmpty(EditText text)
-    {
+
+    private boolean validateEmpty(EditText text) {
         String textToCheck = text.getText().toString().trim();
-        if(textToCheck.isEmpty()){
-            return false;}
-        else
-        {
+        if (textToCheck.isEmpty()) {
+            return false;
+        } else {
             return true;
         }
 
     }
 
-    private void UpadateVotes(int commentid ,String username,String ref)
-    {
-         //loading.setVisibility(View.VISIBLE);
+    private void UpadateVotes(int commentid, String username, String ref) {
 
+        loading1.setVisibility(View.VISIBLE);
+        requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.start();
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("commentid", String.valueOf(commentid));
         params.put("ref", ref);
@@ -478,15 +545,14 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            if(response.has("success")) {
+                            if (response.has("success")) {
 
                                 //loading.setVisibility(View.GONE);
-                                Toast.makeText(getActivity(), ""+response.getString("success"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "" + response.getString("success"), Toast.LENGTH_SHORT).show();
                                 //openDialogue();
-                            }
-                            else
-                            {
-                                Toast.makeText(getActivity(), " internal error happened "+response.getString("notfound"), Toast.LENGTH_SHORT).show();
+                                loading1.setVisibility(View.GONE);
+                            } else {
+                                Toast.makeText(getActivity(), " internal error happened " + response.getString("notfound"), Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
 
@@ -496,6 +562,7 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
                 Toast.makeText(getActivity(), "Connection Lost to the Server", Toast.LENGTH_SHORT).show();
 
             }
@@ -504,31 +571,26 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
         requestQueue.add(jsObjRequest);
 
 
-
-
     }
-    private Bundle checkVoter ()
-    {
 
+
+    private void checkVoter(final int dealid) {
+        requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.start();
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("username", username);
-
-        final Bundle data = new Bundle();
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, URL_checker,new JSONObject(params), new Response.Listener<JSONArray>() {
+        params.put("dealid", String.valueOf(dealid));
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, URL_checker, new JSONObject(params), new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
                     for (int i = 0; i < response.length(); i++) {
                         JSONObject hit = response.getJSONObject(i);
                         int id = hit.getInt("idVotes");
-                        int idcomment = hit.getInt("idcomment");
+                        int idcomment = hit.getInt("idcomments");
                         String username = hit.getString("username");
                         String ref = hit.getString("ref");
-                        data.putInt("idVotes",id);
-                        data.putInt("idcomment",idcomment);
-                        data.putString("username",username);
-                        data.putString("ref",ref);
-
+                        votesList.add(new Votes(id, username, ref, idcomment));
                     }
 
                 } catch (JSONException e) {
@@ -546,9 +608,31 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
         });
 
         requestQueue.add(request);
-        return data;
-    }
 
 
     }
+
+    private void saveDeal() {
+        Bundle data = getArguments();
+        String other1 = data.getString("other1");
+        String other2 = data.getString("other2");
+        String other3 = data.getString("other3");
+        String Created = data.getString("Created");
+        String name = data.getString("name");
+        String owner = data.getString("owner");
+        Integer idDeal = data.getInt("idparts", 0);
+        String refrence = data.getString("refrnce");
+        String tag_description = data.getString("tag_description");
+        Float price = data.getFloat("price");
+        String type = data.getString("Type");
+        String state = data.getString("state");
+        byte[] image = data.getByteArray("image");
+        Parts part = new Parts(idDeal,owner,name,other1,price,other2,other3,type,state,image,tag_description,Created,refrence);
+        bookmarkViewModel= ViewModelProviders.of(this).get(BookmarkViewModel.class);
+        bookmarkViewModel.insert(part);
+        Toast.makeText(getActivity(), "Deal BookMarked", Toast.LENGTH_SHORT).show();
+    }
+
+
+}
 

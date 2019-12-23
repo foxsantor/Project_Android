@@ -63,8 +63,6 @@ public class AuthenticationFragment extends Fragment {
             "public_profile", "user_friends",
             "user_likes", "user_hometown",
             "user_birthday"};
-
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         loadData(view);
@@ -172,7 +170,7 @@ public class AuthenticationFragment extends Fragment {
                                         names = strName.split(" ",2);
                                         strFirstname= names[0];
                                         strLastname = names[1];
-                                        RegisterProvider(strEmail,strFirstname,strLastname,strId,"facebook");
+                                        RegisterProvider(strEmail,strFirstname,strLastname,strId,"1");
                                         loadFragment(getView());
 
                                     } catch (JSONException e) {
@@ -262,7 +260,7 @@ public class AuthenticationFragment extends Fragment {
 
         params.put("username",  username);
         saveDataLogin(username);
-        params.put("provider",  provider);
+        params.put("provider_facebook",  provider);
         params.put("uniqueid",  uniqueid);
         params.put("firstname", firstname);
         params.put("lastname",  lastname);
@@ -275,23 +273,13 @@ public class AuthenticationFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
-                            if(response.getString("success").equals("user exists and updated sucessfully") || response.getString("created").equals("user added provider") ) {
 
-                                Toast.makeText(getActivity(), "Everything is good", Toast.LENGTH_SHORT).show();
-                            }else
-                            {
-                                Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-
-                            e.printStackTrace();
-                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(), "Connection Lost"+error.getMessage(), Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getActivity(), "Connection Lost "+error.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         });

@@ -29,12 +29,13 @@
                 app:layout_constraintTop_toTopOf="parent">
 
 
-                <FrameLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/frami"
                     android:layout_width="293dp"
                     android:layout_height="54dp"
                     android:layout_marginTop="24dp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/signin">
 
@@ -42,27 +43,32 @@
                         android:id="@+id/login_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"></com.facebook.login.widget.LoginButton>
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"></com.facebook.login.widget.LoginButton>
 
                     <Button
                         android:id="@+id/fb"
-                        android:layout_width="294dp"
-                        android:layout_height="32dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="52dp"
-                        android:layout_marginRight="52dp"
-                        android:layout_marginBottom="59dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
                         android:background="@drawable/facbookround"
                         android:drawableLeft="@drawable/com_facebook_button_icon"
                         android:drawablePadding="-30sp"
                         android:onClick="onClickFacebookButton"
-                        android:paddingLeft="20dp"
                         android:text="Continue with Facebook"
                         android:textAllCaps="false"
                         android:textColor="#ffffff"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        app:backgroundTint="@color/Facebook"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                </FrameLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <Button
                     android:id="@+id/button4"
@@ -74,6 +80,7 @@
                     android:text="Google"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
+                    app:backgroundTint="@color/DrakLord"
                     app:layout_constraintBottom_toTopOf="@+id/textView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.501"
@@ -94,6 +101,7 @@
                     android:text="Sign in "
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
+                    app:backgroundTint="@color/DrakLord"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -113,6 +121,7 @@
                     android:text="REgister"
                     android:textColor="#FFFFFF"
                     android:textSize="20sp"
+                    app:backgroundTint="@color/DrakLord"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -185,8 +194,9 @@
                     android:layout_marginTop="176dp"
                     android:layout_marginEnd="158dp"
                     android:layout_marginRight="158dp"
-                    android:text="Here is a long teext "
+                    android:text="NEW CUSTOMER ?"
                     android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.343"
                     app:layout_constraintStart_toStartOf="parent"
@@ -218,9 +228,10 @@
                     android:layout_marginBottom="23dp"
                     android:background="@android:color/transparent"
                     android:text="Forgot Password?"
-                    android:textSize="10sp"
-                    android:textStyle="bold"
                     android:textColor="@color/colorAccent"
+                    android:textSize="8sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@android:color/transparent"
                     app:layout_constraintBottom_toTopOf="@+id/signin"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.921"

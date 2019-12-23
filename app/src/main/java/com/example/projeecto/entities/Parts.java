@@ -1,10 +1,15 @@
 package com.example.projeecto.entities;
 
-import java.util.Objects;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+import java.util.Objects;
+@Entity(tableName = "bookmark_table")
 public class Parts {
 
+    @PrimaryKey(autoGenerate = true)
     private int id;
+
     private String name;
     private String refrence;
     private String other1;
@@ -19,6 +24,10 @@ public class Parts {
     private String owner;
     private String state;
     private String StatusSell;
+    private int vues;
+
+
+
 
     @Override
     public boolean equals(Object o) {
@@ -74,6 +83,7 @@ public class Parts {
         this.state = state;
         this.StatusSell =StatusSell;
     }
+
     public Parts(int id, String name, String refrence, String other1, String other2, String other3, String created, String type, String tag_desc, byte[] image, String owner, String state,String StatusSell,Float price) {
         this.id = id;
         this.name = name;
@@ -121,6 +131,23 @@ public class Parts {
         this.tag_desc=tag_desc;
         this.created=created;
         this.refrence=ref;
+    }
+    public Parts(int id,String owner,String name,String other1,Float price,String other2,String other3,String type,String state,byte[] data,String tag_desc,String created,String ref,int vues )
+    {
+        this.id =id;
+        this.owner = owner;
+        this.name = name;
+        this.other1 = other1;
+        this.other2 = other2;
+        this.price = price;
+        this.state = state;
+        this.other3 = other3;
+        this.Type = type;
+        this.image=data;
+        this.tag_desc=tag_desc;
+        this.created=created;
+        this.refrence=ref;
+        this.vues = vues;
     }
     @Override
     public String toString() {
@@ -242,5 +269,13 @@ public class Parts {
 
     public void setStatusSell(String statusSell) {
         StatusSell = statusSell;
+    }
+
+    public int getVues() {
+        return vues;
+    }
+
+    public void setVues(int vues) {
+        this.vues = vues;
     }
 }
