@@ -19,6 +19,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/wrong"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
@@ -93,7 +94,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.core.widget.NestedScrollView
-                    android:id="@+id/nestedScrollView"
+                    android:id="@+id/nani"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:fillViewport="true"
@@ -131,13 +132,28 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent">
 
+                                    <Button
+                                        android:id="@+id/viewall"
+                                        android:layout_width="80dp"
+                                        android:layout_height="35dp"
+                                        android:layout_marginTop="10dp"
+                                        android:layout_marginEnd="9dp"
+                                        android:layout_marginRight="9dp"
+                                        android:layout_marginBottom="10dp"
+                                        android:text="View All "
+                                        android:textSize="9sp"
+                                        app:backgroundTint="@color/DrakLord"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toStartOf="@+id/hide"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
                                     <TextView
                                         android:id="@+id/textView27"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:background="@color/colorPrimary"
                                         android:padding="16dp"
-                                        android:text="Deals"
+                                        android:text="Most Viewed Deals"
                                         android:textSize="15sp"
                                         android:textStyle="bold"
                                         app:layout_constraintBottom_toBottomOf="parent"
@@ -258,13 +274,28 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent">
 
+                                    <Button
+                                        android:id="@+id/viewall2"
+                                        android:layout_width="80dp"
+                                        android:layout_height="35dp"
+                                        android:layout_marginTop="10dp"
+                                        android:layout_marginEnd="9dp"
+                                        android:layout_marginRight="9dp"
+                                        android:layout_marginBottom="10dp"
+                                        android:text="View All "
+                                        android:textSize="9sp"
+                                        app:backgroundTint="@color/DrakLord"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toStartOf="@+id/hide2"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
                                     <TextView
                                         android:id="@+id/textView36"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:background="@color/colorPrimary"
                                         android:padding="16dp"
-                                        android:text="Auctions"
+                                        android:text="Running Auctions"
                                         android:textSize="15sp"
                                         android:textStyle="bold"
                                         app:layout_constraintBottom_toBottomOf="parent"
@@ -289,6 +320,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/auctionView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:visibility="visible">
@@ -320,6 +352,7 @@
                                             android:layout_height="match_parent"
                                             android:orientation="horizontal"
                                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                            tools:itemCount="8"
                                             tools:listitem="@layout/catalog_view" />
                                     </LinearLayout>
                                 </ScrollView>
@@ -377,6 +410,7 @@
                             app:layout_constraintTop_toBottomOf="parent">
 
                             <androidx.core.widget.NestedScrollView
+                                android:id="@+id/nani2"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:fillViewport="true">
@@ -411,7 +445,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     android:visibility="gone"
-                    app:layout_constraintBottom_toTopOf="@+id/nestedScrollView"
+                    app:layout_constraintBottom_toTopOf="@+id/nani"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -613,7 +647,7 @@
             android:id="@+id/loading_1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/loading"
+            android:background="@color/colorPrimary"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -623,8 +657,8 @@
             <ProgressBar
                 android:id="@+id/progress_bar_2"
                 style="@style/Base.Widget.AppCompat.ProgressBar"
-                android:layout_width="150dp"
-                android:layout_height="109dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="100dp"
 
@@ -635,21 +669,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:layout_marginBottom="44dp"
-                android:gravity="center"
-                android:text="Loading ..."
-                android:textColor="@color/colorAccent"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/progress_bar_2"
-                app:layout_constraintVertical_bias="0.048" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

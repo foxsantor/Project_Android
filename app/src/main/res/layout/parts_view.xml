@@ -5,12 +5,12 @@
     style="@style/Widget.MaterialComponents.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="6dp"
-    android:layout_marginRight="6dp"
-    android:layout_marginBottom="6dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginRight="15dp"
+    app:cardBackgroundColor="@color/colorPrimary"
     app:cardCornerRadius="0dp"
-    app:cardElevation="0dp"
-    app:cardBackgroundColor="@android:color/transparent">
+    app:cardElevation="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -193,7 +193,7 @@
             android:layout_gravity="center"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="0dp"
-            app:cardElevation="0dp"
+            app:cardElevation="3dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -205,25 +205,20 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
                 app:cardBackgroundColor="@android:color/transparent"
-                app:cardCornerRadius="20dp"
-                >
+                app:cardCornerRadius="20dp">
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:scaleType="centerCrop"
+                    android:visibility="visible"
+                    tools:srcCompat="@tools:sample/avatars" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/colorPrimary"
-                        android:scaleType="centerCrop"
-                        android:visibility="visible"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:srcCompat="@tools:sample/avatars" />
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent">
 
                     <View
                         android:id="@+id/view6"
@@ -240,31 +235,34 @@
                     <TextView
                         android:id="@+id/Price"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="31dp"
 
                         android:layout_marginStart="10dp"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginTop="8dp"
-                        android:text="Price : 20 TND"
+                        android:layout_marginTop="4dp"
+                        android:text="5555555"
                         android:textColor="@color/colorPrimary"
                         android:textSize="12sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/textView37"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/view6"
                         app:layout_constraintVertical_bias="0.0" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/seealone"
-                        style="@style/Widget.MaterialComponents.Button"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="62dp"
                         android:layout_height="33dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_marginBottom="149dp"
-                        android:background="@color/colorPrimary"
+                        android:backgroundTint="@color/colorPrimary"
                         android:text="View"
-                        android:textColor="@android:color/secondary_text_light"
+                        app:strokeColor="@color/DrakLord"
+                        app:strokeWidth="2dp"
+                        android:textColor="@color/DrakLord"
                         android:textSize="6sp"
                         app:layout_constraintBottom_toBottomOf="@+id/view6"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -274,23 +272,48 @@
                         android:id="@+id/textView35"
                         android:layout_width="0dp"
                         android:layout_height="25dp"
-                        android:layout_marginStart="150dp"
-                        android:layout_marginLeft="150dp"
-                        android:layout_marginTop="88dp"
-                        android:drawableLeft="@drawable/ic_remove_red_eye_black_24dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="150dp"
                         android:drawablePadding="5dp"
                         android:paddingLeft="4dp"
                         android:paddingTop="10dp"
-                        android:paddingBottom="2dp"
-                        android:text="99"
+                        android:text="999"
                         android:textColor="@color/colorPrimary"
-                        android:textSize="8sp"
+                        android:textSize="9sp"
                         android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/view6"
                         app:layout_constraintEnd_toStartOf="@+id/seealone"
-                        app:layout_constraintHorizontal_bias="0.697"
-                        app:layout_constraintStart_toEndOf="@+id/Price"
-                        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+                        app:layout_constraintStart_toEndOf="@+id/imageView5"
+                        app:layout_constraintTop_toTopOf="@+id/view6" />
+
+                    <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="10dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="50dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginTop="12dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView35"
+                        app:layout_constraintStart_toEndOf="@+id/textView37"
+                        app:layout_constraintTop_toTopOf="@+id/view6"
+                        app:layout_constraintVertical_bias="0.0"
+                        app:srcCompat="@drawable/ic_remove_red_eye_black_24dp" />
+
+                    <TextView
+                        android:id="@+id/textView37"
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="156dp"
+                        android:layout_marginRight="156dp"
+                        android:layout_marginBottom="152dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/view6"
+                        app:layout_constraintEnd_toStartOf="@+id/seealone"
+                        app:layout_constraintTop_toTopOf="@+id/view6"
+                        app:layout_constraintVertical_bias="0.0" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.cardview.widget.CardView>
         </androidx.cardview.widget.CardView>
 

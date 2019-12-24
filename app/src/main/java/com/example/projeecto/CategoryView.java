@@ -144,11 +144,9 @@ public class CategoryView extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if(error.getMessage().contains("notfound"))
-                {
-                    return;
-                }
+
                 error.printStackTrace();
+                return;
 
             }
         });

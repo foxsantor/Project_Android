@@ -34,8 +34,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class CommentAdapter extends RecyclerView.Adapter <CommentAdapter.commentViewHolder> {
@@ -69,6 +71,8 @@ public class CommentAdapter extends RecyclerView.Adapter <CommentAdapter.comment
 
         Comment currentItem=  comments.get(position);
         String username = currentItem.getUsername();
+        Date created = currentItem.getCreated();
+        PrettyTime p = new PrettyTime();
         String text = currentItem.getText();
         int vote = currentItem.getVote();
         int idcomment = currentItem.getIdComment();
@@ -110,6 +114,7 @@ public class CommentAdapter extends RecyclerView.Adapter <CommentAdapter.comment
         holder.cText.setText(Html.fromHtml(text));
         holder.cVotes.setText(String.valueOf(vote));
         holder.cName.setText(username);
+        holder.cDate.setText(p.format(created));
         holder.cAvatar.setText(""+username.toUpperCase().charAt(0));
         //holder.cDate.setText("Price: "+Html.fromHtml(htmlText3)+" TND");
         //holder.mImageView.setImageBitmap(bmp);

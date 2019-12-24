@@ -35,7 +35,7 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
     private String username;
     private NavHostFragment mNavHostFragment;
-    public static final String SKELETON = "http://192.168.1.5:5000/api/"; //"http://192.168.43.242:5000/api/";
+    public static final String SKELETON = "http://192.168.1.10:5000/api/"; //"http://192.168.43.242:5000/api/";
     private static final String URL = SKELETON;
     private static RequestQueue requestQueue;
     private static boolean res;

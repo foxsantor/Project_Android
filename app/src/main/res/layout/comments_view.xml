@@ -16,7 +16,7 @@
         android:background="@drawable/avatarselector"
         android:gravity="center"
         android:text="D"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/DrakLord"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/name"

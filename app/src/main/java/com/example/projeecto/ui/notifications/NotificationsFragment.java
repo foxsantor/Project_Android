@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -72,11 +73,12 @@ public class NotificationsFragment extends Fragment {
     private RequestQueue mRequestQueue;
     private sellsAdapter mSellsAdapter;
     private GridView gridView;
+    private NestedScrollView scrolli,scroll2;
     private ImageButton toggler,close,toggler2,restart;
     private CardView die;
     private String username;
-    private ConstraintLayout validView,Refresh,loading,helper,DealsView,register,popup;
-    private Button join;
+    private ConstraintLayout validView,Refresh,loading,helper,DealsView,register,popup,wrong,auctionView;
+    private Button join,viewAll,viewAll2;
     private AnimatorSet mAnimationSet;
     private CategoryAdapter categoryAdapter;
     private MaterialButton materialButton;
@@ -93,17 +95,58 @@ public class NotificationsFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         notificationsViewModel = ViewModelProviders.of(this).get(NotificationsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
+
         username = loadUsername();
+        scrolli = root.findViewById(R.id.nani);
+        scroll2 = root.findViewById(R.id.nani2);
         restart = root.findViewById(R.id.restart);
         close = root.findViewById(R.id.close);
         loading = root.findViewById(R.id.loading_1);
         helper = root.findViewById(R.id.helper);
-        loading.setVisibility(View.VISIBLE);
         gridView = root.findViewById(R.id.grid);
+        wrong = root.findViewById(R.id.wrong);
+        toggler2 = root.findViewById(R.id.hide2);
+        wrong.setVisibility(View.GONE);
+        auctionView = root.findViewById(R.id.auctionView);
+        viewAll = root.findViewById(R.id.viewall);
+        viewAll2 = root.findViewById(R.id.viewall2);
+        popup = root.findViewById(R.id.popup);
+        toggler = root.findViewById(R.id.hide);
+        DealsView = root.findViewById(R.id.DealsView);
+        validView = root.findViewById(R.id.bigView);
+        validView.setVisibility(View.GONE);
+        mRecyclerView = root.findViewById(R.id.Sells);
+        die = root.findViewById(R.id.relative_layout_id);
+        materialButton = root.findViewById(R.id.materialButton);
+        register = root.findViewById(R.id.register);
+        join = root.findViewById(R.id.join);
         categoryItems = new ArrayList<>();
+        mSellsList = new ArrayList<>();
         categoryItems = Poulater();
         categoryAdapter = new CategoryAdapter(getActivity(),categoryItems);
         gridView.setAdapter(categoryAdapter);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRequestQueue = Volley.newRequestQueue(getContext());
+
+
+
+
+        ObjectAnimator fadeOut = ObjectAnimator.ofFloat(die, "alpha", .5f, .1f);
+        fadeOut.setDuration(300);
+        ObjectAnimator fadeIn = ObjectAnimator.ofFloat(die, "alpha", .1f, .5f);
+        fadeIn.setDuration(300);
+        mAnimationSet = new AnimatorSet();
+        mAnimationSet.play(fadeIn).after(fadeOut);
+        mAnimationSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mAnimationSet.start();
+            }
+        });
+        mAnimationSet.start();
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View view, int position, long id) {
@@ -113,10 +156,6 @@ public class NotificationsFragment extends Fragment {
                 Navigation.findNavController(getActivity(),R.id.nav_host_fragment).navigate(R.id.categoryView,data);
             }
         });
-        helper.setBackgroundColor(Color.parseColor("#FFF5F5F5"));
-        register = root.findViewById(R.id.register);
-        join = root.findViewById(R.id.join);
-
 
         join.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,47 +170,46 @@ public class NotificationsFragment extends Fragment {
         {
             register.setVisibility(View.GONE);
         }
-        popup = root.findViewById(R.id.popup);
-        loading.setVisibility(View.GONE);
-        toggler = root.findViewById(R.id.hide);
-        DealsView = root.findViewById(R.id.DealsView);
-        validView = root.findViewById(R.id.bigView);
-        mRecyclerView = root.findViewById(R.id.Sells);
-        die = root.findViewById(R.id.relative_layout_id);
-        materialButton = root.findViewById(R.id.materialButton);
+
         materialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()){
+                    @Override
+                    public boolean canScrollVertically() {
+                        return  false;
+                    }
+                });
+
+                scrolli.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        return true;
+                    }
+                });
+
+                scroll2.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        return true;
+                    }
+                });
+
                 popup.setVisibility(View.VISIBLE);
             }
         });
+
+
+
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 popup.setVisibility(View.GONE);
+                scrolli.setOnTouchListener(null);
+                scroll2.setOnTouchListener(null);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             }
         });
-
-
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mSellsList = new ArrayList<>();
-        mRequestQueue = Volley.newRequestQueue(getContext());
-        ObjectAnimator fadeOut = ObjectAnimator.ofFloat(die, "alpha", .5f, .1f);
-        fadeOut.setDuration(300);
-        ObjectAnimator fadeIn = ObjectAnimator.ofFloat(die, "alpha", .1f, .5f);
-        fadeIn.setDuration(300);
-        mAnimationSet = new AnimatorSet();
-        mAnimationSet.play(fadeIn).after(fadeOut);
-        mAnimationSet.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                mAnimationSet.start();
-            }
-        });
-
-        mAnimationSet.start();
 
         toggler.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,6 +226,21 @@ public class NotificationsFragment extends Fragment {
                 }
             }
         });
+        toggler2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(auctionView.getVisibility() == View.VISIBLE)
+                {
+                    auctionView.setVisibility(View.GONE);
+                    toggler2.setImageResource(R.drawable.ic_navigate_next_black_24dp);
+                }else
+                {
+                    auctionView.setVisibility(View.VISIBLE);
+                    toggler2.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+
+                }
+            }
+        });
 
         restart.setOnClickListener(new View.OnClickListener() {
 
@@ -197,9 +250,20 @@ public class NotificationsFragment extends Fragment {
             }
         });
 
-            GetSells();
+        viewAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
+        viewAll2.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
 
+                                        }
+                                    }
+        );
+        GetSells();
         return root;
     }
 
@@ -213,14 +277,24 @@ public class NotificationsFragment extends Fragment {
 
 
     private void GetSells() {
+
+        loading.setVisibility(View.VISIBLE);
+        validView.setVisibility(View.GONE);
+
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, URL, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
 
-                            for (int i = 0; i < response.length(); i++) {
-                                restart.setVisibility(View.GONE);
-                                validView.setVisibility(View.VISIBLE);
+                            int length = 0;
+                            if (response.length() > 3){
+                                length = 3;}
+                            else{
+                                length = response.length();
+                                }
+                            for (int i = 0; i < length; i++) {
+
+
                                 JSONObject hit = response.getJSONObject(i);
                                 int id = hit.getInt("idparts");
                                 String owner = hit.getString("owner");
@@ -239,8 +313,7 @@ public class NotificationsFragment extends Fragment {
                                 byte[] decodedString = Base64.decode(images, Base64.DEFAULT);
                                 if(!state.equals("SOLD"))
                                 mSellsList.add(new Parts(id,owner,name,other1,price,other2,other3,type,state,decodedString,tag_description,created,ref,vues));
-                                loading.setVisibility(View.GONE);
-                                helper.setBackgroundColor(Color.parseColor("#E6E9F0"));
+
                             }
 
                             mSellsAdapter = new sellsAdapter(getActivity(), mSellsList, new sellsAdapter.DetailsAdapterListener() {
@@ -262,15 +335,25 @@ public class NotificationsFragment extends Fragment {
                                     data.putString("Created",mSellsList.get(position).getCreated());
                                     data.putInt("vues",mSellsList.get(position).getVues());
                                     UpdateVues(String.valueOf(mSellsList.get(position).getId()));
+
                                     Navigation.findNavController(getActivity(),R.id.nav_host_fragment).navigate(R.id.viewalone,data);
 
                                 }
                             });
                             mRecyclerView.setAdapter(mSellsAdapter);
+                            final Handler handlers = new Handler();
+                            handlers.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
 
+                                    wrong.setVisibility(View.GONE);
+                                    loading.setVisibility(View.GONE);
+                                    validView.setVisibility(View.VISIBLE);
+
+                                }
+                            }, 2000);
                         } catch (JSONException e) {
                             loading.setVisibility(View.GONE);
-                            helper.setBackgroundColor(Color.parseColor("#E6E9F0"));
                             validView.setVisibility(View.GONE);
                             restart.setVisibility(View.VISIBLE);
                             e.printStackTrace();
@@ -281,13 +364,13 @@ public class NotificationsFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
             final Handler handler = new Handler();
                 validView.setVisibility(View.GONE);
+                wrong.setVisibility(View.VISIBLE);
                 restart.setVisibility(View.INVISIBLE);
 
             handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 loading.setVisibility(View.GONE);
-                helper.setBackgroundColor( Color.parseColor("#E6E9F0"));
                 restart.setVisibility(View.VISIBLE);
             }
         }, 3000);
@@ -341,5 +424,6 @@ public class NotificationsFragment extends Fragment {
         });
         mRequestQueue.add(jsObjRequest);
     }
+
 
 }

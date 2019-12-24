@@ -99,7 +99,7 @@ public class HomeFragmment extends Fragment {
         });
 */
 
-        search.setOnTouchListener(new View.OnTouchListener() {
+        search.getEditText().setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {

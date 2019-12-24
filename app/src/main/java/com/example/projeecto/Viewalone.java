@@ -6,14 +6,17 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
@@ -35,6 +38,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,88 +65,82 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import java.lang.ref.WeakReference;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
 
 public class Viewalone extends Fragment implements OnbackDestrecution {
 
-    TextView Created, name, owner, other1, other2, other3, refrence, tag_description, price, type, other1_v, other2_v, other3_v, portrait;
-    FloatingActionButton shopping;
-    ConstraintLayout other1c, other2c, other3c, appear, loading1;
+    TextView Created, name, owner, other1, other2, other3, refrence, tag_description, price, type, other1_v, other2_v, other3_v, portrait,vues;
+    ImageButton shopping,edit,toggel;
+    ConstraintLayout other1c, other2c, other3c, appear, loading,host,layout;
     Button commentSender, Contact, I, B;
-    String other1s, other2s, other3s, username;
+    String other1s, other2s, other3s, username,fullname;
     private BookmarkViewModel bookmarkViewModel;
-    private ArrayList<Comment> commentList;
-    private ArrayList<Votes> votesList;
-    private CommentAdapter adapter;
-    private RecyclerView mRecyclerView;
-    private static int focus = 0;
-    private static int X,Y;
-
-    private static Votes checky;
-    EditText comment;
+    private EditText comment;
     ImageView imageView;
-    RequestQueue requestQueue,requestQueue1;
-    private static final String URL = MainActivity.SKELETON + "comments/getComments";
+    boolean isKeyboardShowing = false;
+    int idDeal;
     private static final String URL_ADD = MainActivity.SKELETON + "comments/addComment";
-    private static final String URL_vote = MainActivity.SKELETON + "comments/UpdateVotes";
-    private static final String URL_checker = MainActivity.SKELETON + "comments/checkVoter";
-    private int idDeal;
+    RequestQueue requestQueue;
 
+    public Viewalone() {
+    }
 
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_viewalone, container, false);
+        final View view = inflater.inflate(R.layout.fragment_viewalone, container, false);
         OnbackDestrecution();
         Created = view.findViewById(R.id.date_a);
         Contact = view.findViewById(R.id.Contact);
         other1c = view.findViewById(R.id.other1);
         other2c = view.findViewById(R.id.other2);
         other3c = view.findViewById(R.id.other3);
+        host = view.findViewById(R.id.host);
         other1_v = view.findViewById(R.id.other1v);
         other2_v = view.findViewById(R.id.other2v);
-        loading1 = view.findViewById(R.id.loading_1);
+        loading = view.findViewById(R.id.loading);
         other3_v = view.findViewById(R.id.otherv);
         name = view.findViewById(R.id.name_a);
+        layout = view.findViewById(R.id.layout);
         owner = view.findViewById(R.id.ownert);
         other1 = view.findViewById(R.id.other1t);
         other2 = view.findViewById(R.id.other2t);
         other3 = view.findViewById(R.id.other3t);
+        vues = view.findViewById(R.id.views);
         refrence = view.findViewById(R.id.refrencet);
         tag_description = view.findViewById(R.id.textView24);
         price = view.findViewById(R.id.textView17);
         type = view.findViewById(R.id.textView19);
         shopping = view.findViewById(R.id.Addtofavorite);
         imageView = view.findViewById(R.id.imageView4);
-        mRecyclerView = view.findViewById(R.id.comments);
+        edit = view.findViewById(R.id.modifie);
         comment = view.findViewById(R.id.comment);
         appear = view.findViewById(R.id.appear);
         portrait = view.findViewById(R.id.portrait);
         commentSender = view.findViewById(R.id.send);
-        username = loadUsername();
+        toggel = view.findViewById(R.id.hide);
         I = view.findViewById(R.id.I);
         B = view.findViewById(R.id.B);
-        Bundle data = getArguments();
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        commentList = new ArrayList<>();
-        votesList = new ArrayList<>();
-
+        username = loadUsername();
+        final Bundle data = getArguments();
         shopping.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveDeal();
             }
         });
-
-
 
         if (null != data) {
 
@@ -198,16 +196,34 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
                 this.other3c.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
             }
 
-            Created.setText(data.getString("Created"));
+            String dtStart = data.getString("Created");
+            SimpleDateFormat  format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'");
+            try {
+                Date date = format.parse(dtStart);
+                PrettyTime p = new PrettyTime();
+                date = new Date(date.getTime()+1*3600*1000);
+                Created.setText(p.format(date));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+
+
+            vues.setText(String.valueOf(data.getInt("vues")));
             name.setText(data.getString("name"));
-            owner.setText(data.getString("owner"));
+            //owner.setText(data.getString("owner"));
+            owner.setText(fullname);
+            if(username.equals(data.getString("owner")))
+            {
+                shopping.setVisibility(View.GONE);
+                edit.setVisibility(View.VISIBLE);
+            }
             idDeal = data.getInt("idparts", 0);
-            checkVoter(idDeal);
-            getComments(idDeal);
 
             refrence.setText(data.getString("refrnce"));
             tag_description.setText(data.getString("tag_description"));
-            price.setText(data.getFloat("price") + " TND");
+            price.setText(priceFormInflater(data.getFloat("price"))+ " TND");
             type.setText(data.getString("Type"));
             byte[] image = data.getByteArray("image");
             Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
@@ -215,17 +231,23 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
 
         }
 
+        toggel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(host.getVisibility() == View.VISIBLE)
+                {
+                    host.setVisibility(View.GONE);
+                    layout.setVisibility(View.GONE);
+                    toggel.setImageResource(R.drawable.ic_navigate_next_black_24dp);
+                }else
+                {
+                    host.setVisibility(View.VISIBLE);
+                    layout.setVisibility(View.VISIBLE);
+                    toggel.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
 
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        OnbackDestrecution();
-
-
-        //init
+                }
+            }
+        });
 
         I.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,6 +265,7 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
                 comment.setText(current_comment);
             }
         });
+
         comment.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -260,7 +283,6 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
                 return false;
             }
         });
-
         comment.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -288,13 +310,23 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
         commentSender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 addComment(comment.getText().toString(), username, idDeal);
-                adapter.notifyDataSetChanged();
+                Bundle searchData = new Bundle();
+                searchData.putInt("id",idDeal);
+                Navigation.findNavController(getActivity(), R.id.comment_host).navigate(R.id.commentsection,searchData);
 
             }
         });
 
 
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        OnbackDestrecution();
 
 
         Contact.setOnClickListener(new View.OnClickListener() {
@@ -309,7 +341,43 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
         });
 
 
+
+// ContentView is the root view of the layout of this activity/fragment
+        view.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+
+                        Rect r = new Rect();
+                        view.getWindowVisibleDisplayFrame(r);
+                        int screenHeight = view.getRootView().getHeight();
+
+                        // r.bottom is the position above soft keypad or device button.
+                        // if keypad is shown, the r.bottom is smaller than that before.
+                        int keypadHeight = screenHeight - r.bottom;
+
+
+                        if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
+                            // keyboard is opened
+                            if (!isKeyboardShowing) {
+                                isKeyboardShowing = true;
+                                Contact.setVisibility(View.GONE);
+                            }
+                        }
+                        else {
+                            // keyboard is closed
+                            if (isKeyboardShowing) {
+                                isKeyboardShowing = false;
+                                Contact.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                });
+
+
     }
+
+
 
     @Override
     public void OnbackDestrecution() {
@@ -319,156 +387,38 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
 
     }
 
-    private void getComments(final int idParts) {
-        loading1.setVisibility(View.VISIBLE);
-
-        requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.start();
-
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("dealid", Integer.toString(idParts));
-        // the entered data as the JSON body.
-        final JsonArrayRequest jsObjRequest = new
-                JsonArrayRequest(
-                Request.Method.POST,
-                URL,
-                new JSONObject(params),
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            JSONObject jresponse = response.getJSONObject(0);
-                            if (response.length() > 0) {
-                                for (int i = 0; i < response.length(); i++) {
-
-                                    JSONObject hit = response.getJSONObject(i);
-                                     int idComments = hit.getInt("idcomments");
-                                    String firstname = hit.getString("firstname");
-                                    String lastname = hit.getString("lastname");
-                                    String username = hit.getString("username");
-                                    String text = hit.getString("text");
-                                    int votes = hit.getInt("votes");
-                                    int dealid = hit.getInt("dealid");
-                                    int state = hit.getInt("state");
-                                    String created = hit.getString("created");
-
-
-                                    Date date = new Date();
-                                    try {
-                                        date = parse(created);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-
-                                    if (state != 1)
-                                        commentList.add(new Comment(idComments, dealid, votes, text, lastname + " " + firstname, date, votesList));
-                                }
-
-                                adapter = new CommentAdapter(getActivity(), commentList, new CommentAdapter.OnClickedListner() {
-                                    @Override
-                                    public void upvVote(final View v, int position) {
-
-                                        UpadateVotes(commentList.get(position).getIdComment(), username, "up");
-                                        focus =1;
-                                        ViewTreeObserver vto=v.getViewTreeObserver();
-                                        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                                            @Override
-                                            public void onGlobalLayout() {
-                                                int[] location = new int[2];
-                                                v.getLocationOnScreen(location);
-                                                X = location[0];
-                                                Y = location[1];
-                                                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                                            }
-                                        });
-
-                                        Bundle data =getArguments();
-                                        Navigation.findNavController(getView()).navigate(R.id.viewalone, data);
 
 
 
-                                    }
-
-                                    @Override
-                                    public void downvVote(final View v, int position) {
-
-                                        UpadateVotes(commentList.get(position).getIdComment(), username, "down");
-                                        focus =1;
-                                        ViewTreeObserver vto=v.getViewTreeObserver();
-                                        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                                            @Override
-                                            public void onGlobalLayout() {
-                                                int[] location = new int[2];
-                                                v.getLocationOnScreen(location);
-                                                X = location[0];
-                                                Y = location[1];
-                                                Toast.makeText(getActivity(), ""+X+""+Y, Toast.LENGTH_SHORT).show();
-                                                v.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                                            }
-                                        });
-                                        Bundle data =getArguments();
-                                        Navigation.findNavController(getView()).navigate(R.id.viewalone, data);
-
-
-                                    }
-
-                                });
-
-
-                                mRecyclerView.setAdapter(adapter);
-                                adapter.notifyDataSetChanged();
-                                loading1.setVisibility(View.GONE);
-
-
-
-                                //loadingBar.setVisibility(View.GONE);
-                            }
-                        } catch (JSONException e) {
-
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (error.getMessage().contains("failed")) {
-                    return;
-                }
-                Toast.makeText(getActivity(), "Connection Lost " + error, Toast.LENGTH_LONG).show();
-                error.printStackTrace();
-
-            }
-        });
-
-        requestQueue.add(jsObjRequest);
-
-
+    private void saveDeal() {
+        Bundle data = getArguments();
+        String other1 = data.getString("other1");
+        String other2 = data.getString("other2");
+        String other3 = data.getString("other3");
+        String Created = data.getString("Created");
+        String name = data.getString("name");
+        String owner = data.getString("owner");
+        Integer idDeal = data.getInt("idparts", 0);
+        String refrence = data.getString("refrnce");
+        String tag_description = data.getString("tag_description");
+        Float price = data.getFloat("price");
+        String type = data.getString("Type");
+        String state = data.getString("state");
+        byte[] image = data.getByteArray("image");
+        Parts part = new Parts(idDeal,owner,name,other1,price,other2,other3,type,state,image,tag_description,Created,refrence);
+        bookmarkViewModel= ViewModelProviders.of(this).get(BookmarkViewModel.class);
+        bookmarkViewModel.insert(part);
+        Toast.makeText(getActivity(), "Deal BookMarked", Toast.LENGTH_SHORT).show();
     }
 
-    public static Date parse(String input) throws java.text.ParseException {
-
-        //NOTE: SimpleDateFormat uses GMT[-+]hh:mm for the TZ which breaks
-        //things a bit.  Before we go on we have to repair this.
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
-
-        //this is zero time so we need to add that TZ indicator for
-        if (input.endsWith("Z")) {
-            input = input.substring(0, input.length() - 1) + "GMT-00:00";
-        } else {
-            int inset = 6;
-
-            String s0 = input.substring(0, input.length() - inset);
-            String s1 = input.substring(input.length() - inset, input.length());
-
-            input = s0 + "GMT" + s1;
-        }
-
-        return df.parse(input);
-
+    public String loadUsername() {
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("share", Context.MODE_PRIVATE);
+        username = sharedPreferences.getString("email", "");
+        return username;
     }
 
     private void addComment(String text, String username, int idParts) {
-        loading1.setVisibility(View.VISIBLE);
+        loading.setVisibility(View.VISIBLE);
         requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.start();
         //loading.setVisibility(View.VISIBLE);
@@ -491,7 +441,9 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
                                 //loading.setVisibility(View.GONE);
                                 Toast.makeText(getActivity(), "" + response.getString("success"), Toast.LENGTH_SHORT).show();
                                 //openDialogue();
-                                loading1.setVisibility(View.GONE);
+
+                                loading.setVisibility(View.GONE);
+
                             } else {
                                 Toast.makeText(getActivity(), " internal error happened " + response.getString("error"), Toast.LENGTH_SHORT).show();
                             }
@@ -510,13 +462,6 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
         requestQueue.add(jsObjRequest);
 
     }
-
-    public String loadUsername() {
-        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("share", Context.MODE_PRIVATE);
-        username = sharedPreferences.getString("email", "");
-        return username;
-    }
-
     private boolean validateEmpty(EditText text) {
         String textToCheck = text.getText().toString().trim();
         if (textToCheck.isEmpty()) {
@@ -526,111 +471,17 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
         }
 
     }
-
-    private void UpadateVotes(int commentid, String username, String ref) {
-
-        loading1.setVisibility(View.VISIBLE);
-        requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.start();
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("commentid", String.valueOf(commentid));
-        params.put("ref", ref);
-        params.put("username", username);
-
-        // the entered data as the JSON body.
-        JsonObjectRequest jsObjRequest = new
-                JsonObjectRequest(Request.Method.PUT,
-                URL_vote, new JSONObject(params),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            if (response.has("success")) {
-
-                                //loading.setVisibility(View.GONE);
-                                Toast.makeText(getActivity(), "" + response.getString("success"), Toast.LENGTH_SHORT).show();
-                                //openDialogue();
-                                loading1.setVisibility(View.GONE);
-                            } else {
-                                Toast.makeText(getActivity(), " internal error happened " + response.getString("notfound"), Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                Toast.makeText(getActivity(), "Connection Lost to the Server", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        requestQueue.add(jsObjRequest);
+    public static String priceFormInflater(Float price)
+    {
 
 
-    }
+        if (price == Math.floor(price)) {
+            return String.format("%.0f", price);
+        } else {
+            return Float.toString(price);
+        }
 
 
-    private void checkVoter(final int dealid) {
-        requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.start();
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("username", username);
-        params.put("dealid", String.valueOf(dealid));
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, URL_checker, new JSONObject(params), new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-                    for (int i = 0; i < response.length(); i++) {
-                        JSONObject hit = response.getJSONObject(i);
-                        int id = hit.getInt("idVotes");
-                        int idcomment = hit.getInt("idcomments");
-                        String username = hit.getString("username");
-                        String ref = hit.getString("ref");
-                        votesList.add(new Votes(id, username, ref, idcomment));
-                    }
-
-                } catch (JSONException e) {
-
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                error.printStackTrace();
-
-            }
-        });
-
-        requestQueue.add(request);
-
-
-    }
-
-    private void saveDeal() {
-        Bundle data = getArguments();
-        String other1 = data.getString("other1");
-        String other2 = data.getString("other2");
-        String other3 = data.getString("other3");
-        String Created = data.getString("Created");
-        String name = data.getString("name");
-        String owner = data.getString("owner");
-        Integer idDeal = data.getInt("idparts", 0);
-        String refrence = data.getString("refrnce");
-        String tag_description = data.getString("tag_description");
-        Float price = data.getFloat("price");
-        String type = data.getString("Type");
-        String state = data.getString("state");
-        byte[] image = data.getByteArray("image");
-        Parts part = new Parts(idDeal,owner,name,other1,price,other2,other3,type,state,image,tag_description,Created,refrence);
-        bookmarkViewModel= ViewModelProviders.of(this).get(BookmarkViewModel.class);
-        bookmarkViewModel.insert(part);
-        Toast.makeText(getActivity(), "Deal BookMarked", Toast.LENGTH_SHORT).show();
     }
 
 
