@@ -65,17 +65,15 @@ public class Commentsection extends Fragment {
     private static final String URL = MainActivity.SKELETON + "comments/getComments";
     private static final String URL_vote = MainActivity.SKELETON + "comments/UpdateVotes";
     private static final String URL_checker = MainActivity.SKELETON + "comments/checkVoter";
+    private static final String URL_neutralize = MainActivity.SKELETON+ "comments/Neutralize";
     private int idDeal ;
 
     public Commentsection() {
         // Required empty public constructor
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_commentsection, container, false);
         loading = root.findViewById(R.id.loading);
         view = root.findViewById(R.id.view);
@@ -143,26 +141,18 @@ public class Commentsection extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
+
                             if (response.has("success")) {
 
-                                //loading.setVisibility(View.GONE);
-                                Toast.makeText(getActivity(), "" + response.getString("success"), Toast.LENGTH_SHORT).show();
-                                //openDialogue();
                                 loading.setVisibility(View.GONE);
-                            } else {
-                                Toast.makeText(getActivity(), " internal error happened " + response.getString("notfound"), Toast.LENGTH_SHORT).show();
                             }
-                        } catch (JSONException e) {
-
-                            e.printStackTrace();
-                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Toast.makeText(getActivity(), "Connection Lost to the Server", Toast.LENGTH_SHORT).show();
+
+                return;
 
             }
         });
@@ -188,7 +178,8 @@ public class Commentsection extends Fragment {
                         int idcomment = hit.getInt("idcomments");
                         String username = hit.getString("username");
                         String ref = hit.getString("ref");
-                        votesList.add(new Votes(id, username, ref, idcomment));
+                        String state = "yes";
+                        votesList.add(new Votes(id, username, ref, idcomment,state));
                     }
 
                 } catch (JSONException e) {
@@ -210,33 +201,10 @@ public class Commentsection extends Fragment {
 
 
     }
-    public static Date parse(String input) throws java.text.ParseException {
-
-        //NOTE: SimpleDateFormat uses GMT[-+]hh:mm for the TZ which breaks
-        //things a bit.  Before we go on we have to repair this.
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
-
-        //this is zero time so we need to add that TZ indicator for
-        if (input.endsWith("Z")) {
-            input = input.substring(0, input.length() - 1) + "GMT-00:00";
-        } else {
-            int inset = 6;
-
-            String s0 = input.substring(0, input.length() - inset);
-            String s1 = input.substring(input.length() - inset, input.length());
-
-            input = s0 + "GMT" + s1;
-        }
-
-        return df.parse(input);
-
-    }
     private void getComments(final int idParts) {
         loading.setVisibility(View.VISIBLE);
-
         requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.start();
-
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("dealid", Integer.toString(idParts));
         // the entered data as the JSON body.
@@ -252,7 +220,6 @@ public class Commentsection extends Fragment {
                             JSONObject jresponse = response.getJSONObject(0);
                             if (response.length() > 0) {
                                 for (int i = 0; i < response.length(); i++) {
-
                                     JSONObject hit = response.getJSONObject(i);
                                     int idComments = hit.getInt("idcomments");
                                     String firstname = hit.getString("firstname");
@@ -268,19 +235,29 @@ public class Commentsection extends Fragment {
                                     try {
                                         date = format.parse(created);
                                         date = new Date(date.getTime()+1*3600*1000);
-
-
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
-
                                     if (state != 1)
-                                        commentList.add(new Comment(idComments, dealid, votes, text, lastname + " " + firstname, date, votesList));
-                                }
-
-                                adapter = new CommentAdapter(getActivity(), commentList, new CommentAdapter.OnClickedListner() {
+                                        commentList.add(new Comment(idComments, dealid, votes, text, MainActivity.capitalize(lastname) + " " + MainActivity.capitalize(firstname), date, votesList,username,state));
+                                    }
+                                    adapter = new CommentAdapter(getActivity(), commentList, new CommentAdapter.OnClickedListner() {
+                                    @Override
+                                    public void upvVote2(View v, int position) {
+                                        NeutralizeVotes(commentList.get(position).getIdComment(), username);
+                                        Bundle data =getArguments();
+                                        Navigation.findNavController(getView()).navigate(R.id.commentsection, data);
+                                    }
+                                    @Override
+                                    public void downvVote2(View v, int position) {
+                                        NeutralizeVotes(commentList.get(position).getIdComment(), username);
+                                        Bundle data =getArguments();
+                                        Navigation.findNavController(getView()).navigate(R.id.commentsection, data);
+                                    }
                                     @Override
                                     public void upvVote(final View v, int position) {
+
+                                        //NeutralizeVotes(commentList.get(position).getIdComment(), username);
                                         UpadateVotes(commentList.get(position).getIdComment(), username, "up");
                                         Bundle data =getArguments();
                                         Navigation.findNavController(getView()).navigate(R.id.commentsection, data);
@@ -288,15 +265,21 @@ public class Commentsection extends Fragment {
                                     @Override
                                     public void downvVote(final View v, int position) {
 
-                                        UpadateVotes(commentList.get(position).getIdComment(), username, "down");
+
+                                           // NeutralizeVotes(commentList.get(position).getIdComment(), username);
+
+                                            UpadateVotes(commentList.get(position).getIdComment(), username, "down");
+
+
                                         Bundle data =getArguments();
+
                                         Navigation.findNavController(getView()).navigate(R.id.commentsection, data);
                                     }
                                 });
                                 mRecyclerView.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
                                 loading.setVisibility(View.GONE);
                                 //loadingBar.setVisibility(View.GONE);
-
                             }
                         } catch (JSONException e) {
 
@@ -311,11 +294,36 @@ public class Commentsection extends Fragment {
                 return;
             }
         });
-
         requestQueue.add(jsObjRequest);
-
-
     }
+    private void NeutralizeVotes(int commentid, String username)
+    {
+        loading.setVisibility(View.VISIBLE);
+        requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.start();
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("commentid", String.valueOf(commentid));
+        params.put("username", username);
+        // the entered data as the JSON body.
+        JsonObjectRequest jsObjRequest = new
+                JsonObjectRequest(Request.Method.POST,
+                URL_neutralize, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                            if (response.has("success"))
+                            {
+                                loading.setVisibility(View.GONE);
+                            }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
-
+                Toast.makeText(getActivity(), "Something went Wrong  in Neutrilze", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        });
+        requestQueue.add(jsObjRequest);
+    }
 }

@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/Accentov2</item>
         <item name="colorAccent">@color/Accentov2</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
     </style>
 
     <style name="CustomTextInputLayoutStyle" parent="@android:style/TextAppearance">
@@ -13,6 +14,9 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="PopupMenu" parent="@android:style/Widget.PopupMenu">
+        <item name="android:popupBackground">@color/loading</item>
+    </style>
 
 
 

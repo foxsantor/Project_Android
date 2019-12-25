@@ -33,7 +33,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@color/colorPrimary">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,7 +45,8 @@
                         android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView17">
+                        app:layout_constraintTop_toBottomOf="@+id/textView17"
+                        tools:visibility="gone">
 
                         <TextView
                             android:id="@+id/textView18"
@@ -86,7 +87,8 @@
                         android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/type">
+                        app:layout_constraintTop_toBottomOf="@+id/type"
+                        tools:visibility="gone">
 
                         <TextView
                             android:id="@+id/ownerv"
@@ -125,7 +127,8 @@
                         android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/other2">
+                        app:layout_constraintTop_toBottomOf="@+id/other2"
+                        tools:visibility="gone">
 
                         <TextView
                             android:id="@+id/otherv"
@@ -166,7 +169,8 @@
                         android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/other1">
+                        app:layout_constraintTop_toBottomOf="@+id/other1"
+                        tools:visibility="gone">
 
                         <TextView
                             android:id="@+id/other2v"
@@ -205,7 +209,8 @@
                         android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/owner">
+                        app:layout_constraintTop_toBottomOf="@+id/owner"
+                        tools:visibility="gone">
 
                         <TextView
                             android:id="@+id/other1v"
@@ -240,12 +245,13 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/refrence"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="41dp"
                         android:background="@color/Grayish"
                         android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/other3">
+                        app:layout_constraintTop_toBottomOf="@+id/other3"
+                        tools:visibility="visible">
 
                         <TextView
                             android:id="@+id/refrencev"
@@ -490,119 +496,14 @@
                         app:layout_constraintTop_toBottomOf="@+id/name_a"
                         app:srcCompat="@drawable/ic_access_time_black_24dp" />
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/layout"
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView7"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_height="60dp"
+                        android:alpha="0.5"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
-
-                        <TextView
-                            android:id="@+id/portrait"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="5dp"
-                            android:background="@drawable/avatarselector"
-                            android:gravity="center"
-                            android:text="J"
-                            android:textColor="@color/DrakLord"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.04" />
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/appear"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="61dp"
-                            android:layout_marginLeft="61dp"
-                            android:layout_marginEnd="17dp"
-                            android:layout_marginRight="17dp"
-                            android:visibility="gone"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/comment">
-
-                            <Button
-                                android:id="@+id/I"
-                                android:layout_width="34dp"
-                                android:layout_height="32dp"
-                                android:layout_marginStart="10dp"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginTop="2dp"
-                                android:background="@color/gray"
-                                android:text="I"
-                                android:textSize="8sp"
-                                android:textStyle="italic"
-                                app:backgroundTint="@color/colorPrimaryDark"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/B"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <Button
-                                android:id="@+id/send"
-                                android:layout_width="77dp"
-                                android:layout_height="32dp"
-                                android:layout_marginStart="100dp"
-                                android:layout_marginLeft="100dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:background="@drawable/blenddarker"
-                                android:text="Post"
-                                android:textColor="#FFFFFF"
-                                android:textSize="8sp"
-                                android:textStyle="bold"
-                                app:backgroundTint="@color/DrakLord"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toEndOf="@+id/I"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <Button
-                                android:id="@+id/B"
-                                android:layout_width="34dp"
-                                android:layout_height="32dp"
-                                android:layout_marginStart="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="2dp"
-                                android:text="B"
-                                android:textSize="8sp"
-                                android:textStyle="bold"
-                                app:backgroundTint="@color/colorPrimaryDark"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <EditText
-                            android:id="@+id/comment"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginEnd="17dp"
-                            android:layout_marginRight="17dp"
-                            android:background="@drawable/style_edittext"
-                            android:ems="10"
-                            android:gravity="start|top"
-                            android:hint="Leave a Comment ..."
-                            android:inputType="textMultiLine"
-                            android:padding="10dp"
-                            android:textSize="12sp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/portrait"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        app:layout_constraintStart_toStartOf="parent" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/constraintLayout5"
@@ -611,7 +512,8 @@
                         android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/refrence">
+                        app:layout_constraintTop_toBottomOf="@+id/refrence"
+                        tools:visibility="visible">
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/deals"
@@ -634,12 +536,13 @@
                                 <TextView
                                     android:id="@+id/textView27"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="52dp"
                                     android:background="@color/colorPrimary"
                                     android:padding="16dp"
                                     android:text="Comments"
                                     android:textSize="15sp"
                                     android:textStyle="bold"
+                                    android:visibility="visible"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -656,45 +559,170 @@
                                     app:layout_constraintHorizontal_bias="0.955"
                                     app:layout_constraintStart_toStartOf="@+id/textView27"
                                     app:layout_constraintTop_toTopOf="parent"
-                                    app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp" />
+                                    app:srcCompat="@drawable/ic_navigate_next_black_24dp" />
+
+                                <ImageView
+                                    android:id="@+id/imageView8"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="36dp"
+                                    android:layout_marginRight="36dp"
+                                    android:layout_marginBottom="12dp"
+                                    android:visibility="visible"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toStartOf="@+id/hide"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintVertical_bias="0.875"
+                                    app:srcCompat="@drawable/ic_chat_bubble_outline_black_24dp" />
+
+                                <TextView
+                                    android:id="@+id/num"
+                                    android:layout_width="19dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="12dp"
+                                    android:background="@drawable/button_round"
+                                    android:gravity="center"
+                                    android:paddingLeft="2dp"
+                                    android:paddingRight="2dp"
+                                    android:text="250"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="8.5sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="@+id/imageView8"
+                                    app:layout_constraintHorizontal_bias="0.0"
+                                    app:layout_constraintStart_toStartOf="@+id/imageView8"
+                                    app:layout_constraintTop_toTopOf="parent" />
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </androidx.cardview.widget.CardView>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/host"
                         android:layout_width="match_parent"
-                        android:layout_height="400dp"
-                        android:layout_marginTop="10dp"
-                        app:layout_constraintBottom_toTopOf="@+id/cardView6"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toTopOf="@+id/cardView7"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/layout">
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/layout1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="visible">
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/comment"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    app:boxStrokeColor="@color/DrakLord"
+                                    app:endIconMode="clear_text"
+                                    app:errorEnabled="false"
+                                    app:hintEnabled="false"
+                                    app:hintTextColor="@color/DrakLord"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginRight="10dp"
+                                        android:background="@null"
+                                        android:hint="Leave a comment ..."
+                                        android:inputType="textMultiLine"
+                                        android:textCursorDrawable="@null"
+                                        android:textSize="14sp" />
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/appear"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:visibility="visible"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/comment">
+
+                                    <Button
+                                        android:id="@+id/I"
+                                        android:layout_width="36dp"
+                                        android:layout_height="35dp"
+                                        android:layout_marginStart="10dp"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginTop="2dp"
+                                        android:background="@color/gray"
+                                        android:text="I"
+                                        android:textSize="8sp"
+                                        android:textStyle="italic"
+                                        app:backgroundTint="@color/colorPrimaryDark"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintStart_toEndOf="@+id/B"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <Button
+                                        android:id="@+id/send"
+                                        android:layout_width="77dp"
+                                        android:layout_height="35dp"
+                                        android:layout_marginEnd="10dp"
+                                        android:layout_marginRight="10dp"
+                                        android:background="@drawable/blenddarker"
+                                        android:text="Post"
+                                        android:textColor="#FFFFFF"
+                                        android:textSize="8sp"
+                                        android:textStyle="bold"
+                                        app:backgroundTint="@color/DrakLord"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <Button
+                                        android:id="@+id/B"
+                                        android:layout_width="36dp"
+                                        android:layout_height="35dp"
+                                        android:layout_marginStart="20dp"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginTop="2dp"
+                                        android:text="B"
+                                        android:textSize="8sp"
+                                        android:textStyle="bold"
+                                        app:backgroundTint="@color/colorPrimaryDark"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </androidx.cardview.widget.CardView>
 
                         <fragment
                             android:id="@+id/comment_host"
                             android:name="androidx.navigation.fragment.NavHostFragment"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-
+                            android:layout_height="400dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/layout1"
                             app:navGraph="@navigation/commnt_nav" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardView6"
-                        android:layout_width="match_parent"
-                        android:layout_height="65dp"
-                        android:layout_marginLeft="@dimen/mtrl_card_spacing"
-                        android:layout_marginRight="@dimen/mtrl_card_spacing"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -706,7 +734,7 @@
             android:layout_width="200dp"
             android:layout_height="0dp"
             android:layout_marginBottom="5dp"
-            android:alpha="0.9"
+            android:alpha="0.85"
             android:background="@drawable/button_round"
             android:text="Contact Owner"
             android:textColor="@color/colorPrimary"

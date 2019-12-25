@@ -19,10 +19,12 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -81,17 +83,18 @@ import java.util.HashMap;
 
 public class Viewalone extends Fragment implements OnbackDestrecution {
 
-    TextView Created, name, owner, other1, other2, other3, refrence, tag_description, price, type, other1_v, other2_v, other3_v, portrait,vues;
-    ImageButton shopping,edit,toggel;
-    ConstraintLayout other1c, other2c, other3c, appear, loading,host,layout;
+    TextView Created, name, owner, other1, other2, other3, refrence, tag_description, price, type, other1_v, other2_v, other3_v, portrait,vues,num;
+    ImageButton shopping,edit,toggel,back;
+    ConstraintLayout other1c, other2c, other3c, appear, loading,layout,host;
     Button commentSender, Contact, I, B;
-    String other1s, other2s, other3s, username,fullname;
+    String other1s, other2s, other3s, username,fullName,nums;
     private BookmarkViewModel bookmarkViewModel;
-    private EditText comment;
+    private TextInputLayout comment;
     ImageView imageView;
     boolean isKeyboardShowing = false;
     int idDeal;
     private static final String URL_ADD = MainActivity.SKELETON + "comments/addComment";
+    private static final String URL_GETUSERCOMMENT = MainActivity.SKELETON + "comments/getUsernameandComments";
     RequestQueue requestQueue;
 
     public Viewalone() {
@@ -103,11 +106,12 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
         final View view = inflater.inflate(R.layout.fragment_viewalone, container, false);
         OnbackDestrecution();
         Created = view.findViewById(R.id.date_a);
+        num = view.findViewById(R.id.num);
         Contact = view.findViewById(R.id.Contact);
+        host = view.findViewById(R.id.host);
         other1c = view.findViewById(R.id.other1);
         other2c = view.findViewById(R.id.other2);
         other3c = view.findViewById(R.id.other3);
-        host = view.findViewById(R.id.host);
         other1_v = view.findViewById(R.id.other1v);
         other2_v = view.findViewById(R.id.other2v);
         loading = view.findViewById(R.id.loading);
@@ -128,9 +132,9 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
         edit = view.findViewById(R.id.modifie);
         comment = view.findViewById(R.id.comment);
         appear = view.findViewById(R.id.appear);
-        portrait = view.findViewById(R.id.portrait);
         commentSender = view.findViewById(R.id.send);
         toggel = view.findViewById(R.id.hide);
+        back = view.findViewById(R.id.back);
         I = view.findViewById(R.id.I);
         B = view.findViewById(R.id.B);
         username = loadUsername();
@@ -213,13 +217,14 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
             vues.setText(String.valueOf(data.getInt("vues")));
             name.setText(data.getString("name"));
             //owner.setText(data.getString("owner"));
-            owner.setText(fullname);
+
             if(username.equals(data.getString("owner")))
             {
                 shopping.setVisibility(View.GONE);
                 edit.setVisibility(View.VISIBLE);
             }
             idDeal = data.getInt("idparts", 0);
+            getuseerComments(data.getString("owner"),idDeal);
 
             refrence.setText(data.getString("refrnce"));
             tag_description.setText(data.getString("tag_description"));
@@ -229,6 +234,7 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
             Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
             imageView.setImageBitmap(bmp);
 
+
         }
 
         toggel.setOnClickListener(new View.OnClickListener() {
@@ -237,42 +243,48 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
                 if(host.getVisibility() == View.VISIBLE)
                 {
                     host.setVisibility(View.GONE);
-                    layout.setVisibility(View.GONE);
                     toggel.setImageResource(R.drawable.ic_navigate_next_black_24dp);
                 }else
                 {
                     host.setVisibility(View.VISIBLE);
-                    layout.setVisibility(View.VISIBLE);
                     toggel.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
 
                 }
             }
         });
 
+        back.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        getActivity().onBackPressed();
+                                    }
+                                }
+
+        );
         I.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String current_comment = comment.getText().toString();
+                String current_comment = comment.getEditText().getText().toString();
                 current_comment = "<i>" + current_comment + "</i>";
-                comment.setText(current_comment);
+                comment.getEditText().setText(current_comment);
             }
         });
         B.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String current_comment = comment.getText().toString();
+                String current_comment = comment.getEditText().getText().toString();
                 current_comment = "<b>" + current_comment + "</b>";
-                comment.setText(current_comment);
+                comment.getEditText().setText(current_comment);
             }
         });
 
-        comment.setOnTouchListener(new View.OnTouchListener() {
+        comment.getEditText().setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     appear.setVisibility(View.VISIBLE);
                 }
-                if (!validateEmpty(comment)) {
+                if (!validateEmpty(comment.getEditText())) {
                     commentSender.setClickable(false);
                     commentSender.setBackgroundResource(R.drawable.editblend);
                 } else {
@@ -283,7 +295,7 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
                 return false;
             }
         });
-        comment.addTextChangedListener(new TextWatcher() {
+        comment.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -291,13 +303,13 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!validateEmpty(comment)) {
+                if (!validateEmpty(comment.getEditText())) {
                     commentSender.setClickable(false);
-                    commentSender.setBackgroundResource(R.drawable.editblend);
+                    commentSender.setBackgroundColor(getResources().getColor(R.color.gray));
+
                 } else {
                     commentSender.setClickable(true);
-                    commentSender.setBackgroundResource(R.drawable.blenddarker);
-
+                    commentSender.setBackgroundColor(getResources().getColor(R.color.DrakLord));
                 }
             }
 
@@ -310,8 +322,9 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
         commentSender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                addComment(comment.getText().toString(), username, idDeal);
+                Bundle data = getArguments();
+                addComment(comment.getEditText().getText().toString(), username, idDeal);
+                getuseerComments(data.getString("owner"),idDeal);
                 Bundle searchData = new Bundle();
                 searchData.putInt("id",idDeal);
                 Navigation.findNavController(getActivity(), R.id.comment_host).navigate(R.id.commentsection,searchData);
@@ -332,8 +345,9 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
         Contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle owner = getArguments();
                 Bundle data = new Bundle();
-                data.putString("owner", owner.getText().toString());
+                data.putString("owner", owner.getString("owner"));
                 data.putString("price", price.getText().toString());
                 data.putString("name", name.getText().toString());
                 Navigation.findNavController(getView()).navigate(R.id.action_viewalone_to_contactInterface, data);
@@ -387,9 +401,6 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
 
     }
 
-
-
-
     private void saveDeal() {
         Bundle data = getArguments();
         String other1 = data.getString("other1");
@@ -439,7 +450,7 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
                             if (response.has("success")) {
 
                                 //loading.setVisibility(View.GONE);
-                                Toast.makeText(getActivity(), "" + response.getString("success"), Toast.LENGTH_SHORT).show();
+                                comment.getEditText().setText("");
                                 //openDialogue();
 
                                 loading.setVisibility(View.GONE);
@@ -479,11 +490,49 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
             return String.format("%.0f", price);
         } else {
             return Float.toString(price);
-        }
-
-
     }
 
+
+}
+
+    private void getuseerComments(String username,int dealid)
+    {
+        requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.start();
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("username", username);
+        params.put("dealid", String.valueOf(dealid));
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, URL_GETUSERCOMMENT, new JSONObject(params), new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+
+                        JSONObject hit = response.getJSONObject(i);
+                        nums = String.valueOf(hit.getInt("result"));
+                        fullName = MainActivity.capitalize(hit.getString("lastname"))+" "+MainActivity.capitalize(hit.getString("firstname"));
+                        owner.setText(fullName);
+                        num.setText(nums);
+
+                    }
+
+                } catch (JSONException e) {
+
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                error.printStackTrace();
+                return;
+
+            }
+        });
+
+        requestQueue.add(request);
+    }
 
 }
 

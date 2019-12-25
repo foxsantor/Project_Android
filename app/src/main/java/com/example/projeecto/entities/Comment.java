@@ -15,6 +15,8 @@ public class Comment {
     private Date created;
     private Votes checker;
     public ArrayList<Votes> votes;
+    private String userEmail;
+    private int state;
     public Votes getChecker() {
         return checker;
     }
@@ -31,7 +33,15 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(int idComment,int idDeal, int vote, String text, String username, Date created,ArrayList<Votes> votes) {
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public Comment(int idComment, int idDeal, int vote, String text, String username, Date created, ArrayList<Votes> votes, String userEmail, int state) {
         this.idComment= idComment;
         this.idDeal = idDeal;
         this.vote = vote;
@@ -39,6 +49,8 @@ public class Comment {
         this.username = username;
         this.created = created;
         this.votes =votes;
+        this.userEmail = userEmail;
+        this.state = state;
     }
 
     public Date getCreated() {

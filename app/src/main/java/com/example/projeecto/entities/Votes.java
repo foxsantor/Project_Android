@@ -6,15 +6,27 @@ public class Votes {
     private String username;
     private String ref;
     private int commentid;
+    private String state;
 
-    public Votes() {
+
+    public String getState() {
+        return state;
     }
 
-    public Votes(int idVotes, String username, String ref, int commentid) {
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public Votes() {
+        this.state = "no";
+    }
+
+    public Votes(int idVotes, String username, String ref, int commentid,String state) {
         this.idVotes = idVotes;
         this.username = username;
         this.ref = ref;
         this.commentid = commentid;
+        this.state = state;
     }
 
     @Override

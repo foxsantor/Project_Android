@@ -1,21 +1,31 @@
 package com.example.projeecto.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,11 +35,16 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.projeecto.MainActivity;
 import com.example.projeecto.R;
 import com.example.projeecto.entities.Comment;
 import com.example.projeecto.entities.Parts;
 import com.example.projeecto.entities.Votes;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,8 +61,10 @@ public class CommentAdapter extends RecyclerView.Adapter <CommentAdapter.comment
     private String username;
     private ArrayList<Comment> comments;
     private OnClickedListner lisnter;
-
-
+    private String click ;
+    private RequestQueue requestQueue;
+    final private static String URL_Disable = MainActivity.SKELETON+"comments/DisableComments";
+    final private static String URL_EDIT = MainActivity.SKELETON+"comments/EditComment";
 
 
 
@@ -55,6 +72,8 @@ public class CommentAdapter extends RecyclerView.Adapter <CommentAdapter.comment
 
         void upvVote(View v, int position);
         void downvVote(View v, int position);
+        void upvVote2(View v, int position);
+        void downvVote2(View v, int position);
     }
 
 
@@ -67,43 +86,48 @@ public class CommentAdapter extends RecyclerView.Adapter <CommentAdapter.comment
     }
 
     @Override
-    public void onBindViewHolder(commentViewHolder holder, int position) {
+    public void onBindViewHolder(final commentViewHolder holder, final int position) {
 
-        Comment currentItem=  comments.get(position);
+        final Comment currentItem=  comments.get(position);
         String username = currentItem.getUsername();
         Date created = currentItem.getCreated();
         PrettyTime p = new PrettyTime();
-        String text = currentItem.getText();
+        final String text = currentItem.getText();
         int vote = currentItem.getVote();
-        int idcomment = currentItem.getIdComment();
-
-
+        final int idcomment = currentItem.getIdComment();
+        holder.upVote2.setVisibility(View.INVISIBLE);
+        holder.downVote2.setVisibility(View.INVISIBLE);
+        holder.textView40.setVisibility(View.GONE);
         for(int j = 0; j < currentItem.votes.size();j++)
         {
             if(idcomment == currentItem.votes.get(j).getCommentid())
             {
                 if(currentItem.votes.get(j).getRef().equals("up"))
                 {
-                    holder.upVote.setBackgroundResource(R.drawable.upvote_blue);
-                    holder.upVote.setImageResource(R.drawable.upvote_blue);
-                    holder.downVote.setClickable(true);
-                    holder.upVote.setClickable(false);
+
+                holder.upVote.setVisibility(View.INVISIBLE);
+                    holder.upVote2.setVisibility(View.VISIBLE);
+
+
                 }
                 if(currentItem.votes.get(j).getRef().equals("down"))
                 {
-                    holder.downVote.setBackgroundResource(R.drawable.downvote_blue);
-                    holder.downVote.setImageResource(R.drawable.downvote_blue);
-                    holder.downVote.setClickable(false);
-                    holder.upVote.setClickable(true);
+                    holder.downVote.setVisibility(View.INVISIBLE);
+                    holder.downVote2.setVisibility(View.VISIBLE);
 
                 }
             }
         }
 
-
-
-
-
+        if(currentItem.getState() == 2 )
+        {
+            holder.textView40.setVisibility(View.VISIBLE);
+        }
+        if(!loadUsername().equals(currentItem.getUserEmail()))
+        {
+            holder.menu.setVisibility(View.GONE);
+            holder.textView38.setVisibility(View.GONE);
+        }
 
         //String htmlText1 = type.replace(searchText,"<font color='#536878'><strong>"+searchText+"</strong></font>");
         //String htmlText2 = name.replace(searchText,"<font color='#536878'><strong>"+searchText+"</strong></font>");
@@ -111,11 +135,95 @@ public class CommentAdapter extends RecyclerView.Adapter <CommentAdapter.comment
         //Color checkers + other fields inputs
         //holder.cAvatar.setText(Html.fromHtml(htmlText2));
         /**/
+
+
+        holder.menu.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(final View v) {
+                PopupMenu popup = new PopupMenu(mContext, holder.menu);
+                //inflating menu from xml resource
+                popup.inflate(R.menu.commentdrop);
+                //adding click listener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.deleteComment:
+                                Disabllecomment(currentItem.getIdComment());
+                                notifyItemRemoved(position);
+                                Navigation.findNavController(v).navigate(R.id.commentsection);
+                                return true;
+                            case R.id.editComment:
+                                final AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
+                                LayoutInflater layoutInflater =  (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                View dialogueView =layoutInflater.inflate(R.layout.layoutsavecomment,null);
+                                alert.setView(dialogueView);
+                                final TextInputLayout textInputLayout = dialogueView.findViewById(R.id.argax);
+                                Button I = dialogueView.findViewById(R.id.i);
+                                Button B = dialogueView.findViewById(R.id.b);
+                                alert.setTitle("Edit Comment");
+                                textInputLayout.getEditText().setText(currentItem.getText());
+
+                                I.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        String current_comment = textInputLayout.getEditText().getText().toString();
+                                        current_comment = "<i>" + current_comment + "</i>";
+                                        textInputLayout.getEditText().setText(current_comment);
+                                    }
+                                });
+                                B.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        String current_comment = textInputLayout.getEditText().getText().toString();
+                                        current_comment = "<b>" + current_comment + "</b>";
+                                        textInputLayout.getEditText().setText(current_comment);
+                                    }
+                                });
+
+                                //TextInputLayout textInputLayout =
+                                // Set an EditText view to get user input
+
+                                alert.setPositiveButton("Save", null);
+                                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        // Canceled.
+                                    }
+                                });
+
+                                final AlertDialog alerti =alert.show();
+                               Button save = alerti.getButton(AlertDialog.BUTTON_POSITIVE);
+                               save.setOnClickListener(new View.OnClickListener() {
+                                   @Override
+                                   public void onClick(View vi) {
+                                       if(!textInputLayout.getEditText().getText().toString().isEmpty() && !textInputLayout.getEditText().getText().toString().equals("") && textInputLayout.getEditText().getText().toString()!=null)
+                                       {
+                                           EditComment(currentItem.getIdComment(),textInputLayout.getEditText().getText().toString());
+                                           notifyItemChanged(position);
+                                           Navigation.findNavController(v).navigate(R.id.commentsection);
+                                           alerti.dismiss();
+
+                                       }
+
+                                   }
+                               });
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                //displaying the popup
+                popup.show();
+            }
+        });
         holder.cText.setText(Html.fromHtml(text));
         holder.cVotes.setText(String.valueOf(vote));
         holder.cName.setText(username);
         holder.cDate.setText(p.format(created));
         holder.cAvatar.setText(""+username.toUpperCase().charAt(0));
+
         //holder.cDate.setText("Price: "+Html.fromHtml(htmlText3)+" TND");
         //holder.mImageView.setImageBitmap(bmp);
         //Picasso.with(mContext).load(imageUrl).fit().centerInside().into(holder.mImageView);
@@ -127,8 +235,9 @@ public class CommentAdapter extends RecyclerView.Adapter <CommentAdapter.comment
     }
 
     public class commentViewHolder extends RecyclerView.ViewHolder {
-        public ImageButton upVote,downVote;
-        public TextView cAvatar,cText,cDate,cName,cVotes;
+        public ImageButton upVote,downVote,upVote2,downVote2,menu;
+        public TextView cAvatar,cText,cDate,cName,cVotes,textView38,textView40;
+
 
         public commentViewHolder(View itemView,final OnClickedListner listner) {
 
@@ -140,6 +249,11 @@ public class CommentAdapter extends RecyclerView.Adapter <CommentAdapter.comment
             upVote = itemView.findViewById(R.id.upvote);
             cVotes = itemView.findViewById(R.id.votes);
             downVote = itemView.findViewById(R.id.downvote);
+            downVote2 = itemView.findViewById(R.id.downvote2);
+            upVote2 = itemView.findViewById(R.id.upvote2);
+            menu = itemView.findViewById(R.id.menu);
+            textView38= itemView.findViewById(R.id.textView38);
+            textView40 = itemView.findViewById(R.id.textView40);
 
 
 
@@ -148,6 +262,7 @@ public class CommentAdapter extends RecyclerView.Adapter <CommentAdapter.comment
                 public void onClick(View v) {
                     //
                     lisnter.upvVote(v, getAdapterPosition());
+                    notifyItemChanged(getAdapterPosition());
                 }
             });
             downVote.setOnClickListener(new View.OnClickListener() {
@@ -155,13 +270,25 @@ public class CommentAdapter extends RecyclerView.Adapter <CommentAdapter.comment
                 public void onClick(View v) {
 
                     lisnter.downvVote(v, getAdapterPosition());
+                    notifyItemChanged(getAdapterPosition());
                 }
             });
+            upVote2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //
+                    lisnter.upvVote2(v, getAdapterPosition());
+                    notifyItemChanged(getAdapterPosition());
+                }
+            });
+            downVote2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-
-
-
-
+                    lisnter.downvVote2(v, getAdapterPosition());
+                    notifyItemChanged(getAdapterPosition());
+                }
+            });
 
         }
 
@@ -183,5 +310,71 @@ public class CommentAdapter extends RecyclerView.Adapter <CommentAdapter.comment
         username = sharedPreferences.getString("email","");
         return username;
     }
+
+    private void Disabllecomment(int commentid)
+    {
+
+        requestQueue = Volley.newRequestQueue(mContext);
+        requestQueue.start();
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("idcomment", String.valueOf(commentid));
+        // the entered data as the JSON body.
+        JsonObjectRequest jsObjRequest = new
+                JsonObjectRequest(Request.Method.POST,
+                URL_Disable, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        if (response.has("success")) {
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Toast.makeText(mContext, "Something went Wrong while Disabling", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        });
+
+        requestQueue.add(jsObjRequest);
+    }
+
+    private void EditComment(int commentid,String text)
+    {
+
+        requestQueue = Volley.newRequestQueue(mContext);
+        requestQueue.start();
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("idcomment", String.valueOf(commentid));
+        params.put("text",text);
+        // the entered data as the JSON body.
+        JsonObjectRequest jsObjRequest = new
+                JsonObjectRequest(Request.Method.POST,
+                URL_EDIT, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        if (response.has("success")) {
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Toast.makeText(mContext, "Something went Wrong while editing comment", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        });
+
+        requestQueue.add(jsObjRequest);
+    }
+
 
 }
