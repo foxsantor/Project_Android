@@ -1,5 +1,6 @@
 package com.example.projeecto;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -38,10 +40,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,9 +90,10 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
 
     TextView Created, name, owner, other1, other2, other3, refrence, tag_description, price, type, other1_v, other2_v, other3_v, portrait,vues,num;
     ImageButton shopping,edit,toggel,back;
-    ConstraintLayout other1c, other2c, other3c, appear, loading,layout,host;
+    ConstraintLayout other1c, other2c, other3c, appear, loading,layout,host,ui;
     Button commentSender, Contact, I, B;
     String other1s, other2s, other3s, username,fullName,nums;
+    CardView layout1;
     private BookmarkViewModel bookmarkViewModel;
     private TextInputLayout comment;
     ImageView imageView;
@@ -102,7 +108,7 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_viewalone, container, false);
         OnbackDestrecution();
         Created = view.findViewById(R.id.date_a);
@@ -117,6 +123,8 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
         loading = view.findViewById(R.id.loading);
         other3_v = view.findViewById(R.id.otherv);
         name = view.findViewById(R.id.name_a);
+        ui = view.findViewById(R.id.ui);
+        layout1= view.findViewById(R.id.layout1);
         layout = view.findViewById(R.id.layout);
         owner = view.findViewById(R.id.ownert);
         other1 = view.findViewById(R.id.other1t);
@@ -133,8 +141,10 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
         comment = view.findViewById(R.id.comment);
         appear = view.findViewById(R.id.appear);
         commentSender = view.findViewById(R.id.send);
+        commentSender.setBackgroundColor(getResources().getColor(R.color.gray));
         toggel = view.findViewById(R.id.hide);
         back = view.findViewById(R.id.back);
+        appear.setVisibility(View.VISIBLE);
         I = view.findViewById(R.id.I);
         B = view.findViewById(R.id.B);
         username = loadUsername();
@@ -145,6 +155,9 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
                 saveDeal();
             }
         });
+
+
+
 
         if (null != data) {
 
@@ -215,7 +228,7 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
 
 
             vues.setText(String.valueOf(data.getInt("vues")));
-            name.setText(data.getString("name"));
+            name.setText(MainActivity.capitalize(data.getString("name")));
             //owner.setText(data.getString("owner"));
 
             if(username.equals(data.getString("owner")))
@@ -242,11 +255,25 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
             public void onClick(View v) {
                 if(host.getVisibility() == View.VISIBLE)
                 {
+
                     host.setVisibility(View.GONE);
+                    layout1.setVisibility(View.GONE);
+                    //LinearLayout.LayoutParams params =( LinearLayout.LayoutParams)ui.getLayoutParams();
+                    //params.setMargins(0,0,0,60);
+                    //ConstraintLayout.LayoutParams paramsx =( ConstraintLayout.LayoutParams)host.getLayoutParams();
+                    //paramsx.setMargins(0,0,0,0);
+
                     toggel.setImageResource(R.drawable.ic_navigate_next_black_24dp);
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }else
                 {
                     host.setVisibility(View.VISIBLE);
+                    layout1.setVisibility(View.VISIBLE);
+                    //ConstraintLayout.LayoutParams params =( ConstraintLayout.LayoutParams)host.getLayoutParams();
+                    //params.setMargins(0,0,0,60);
+                    //LinearLayout.LayoutParams paramsx =( LinearLayout.LayoutParams)ui.getLayoutParams();
+                    //paramsx.setMargins(0,0,0,0);
                     toggel.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
 
                 }
@@ -281,16 +308,14 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
         comment.getEditText().setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    appear.setVisibility(View.VISIBLE);
-                }
+
                 if (!validateEmpty(comment.getEditText())) {
                     commentSender.setClickable(false);
-                    commentSender.setBackgroundResource(R.drawable.editblend);
+                    commentSender.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.gray));
+
                 } else {
                     commentSender.setClickable(true);
-                    commentSender.setBackgroundResource(R.drawable.blenddarker);
-
+                    commentSender.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.DrakLord));
                 }
                 return false;
             }
@@ -376,6 +401,7 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
                             if (!isKeyboardShowing) {
                                 isKeyboardShowing = true;
                                 Contact.setVisibility(View.GONE);
+
                             }
                         }
                         else {
@@ -383,6 +409,7 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
                             if (isKeyboardShowing) {
                                 isKeyboardShowing = false;
                                 Contact.setVisibility(View.VISIBLE);
+
                             }
                         }
                     }
@@ -533,6 +560,7 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
 
         requestQueue.add(request);
     }
+
 
 }
 

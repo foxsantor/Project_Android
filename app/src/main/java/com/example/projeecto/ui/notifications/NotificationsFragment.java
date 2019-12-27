@@ -157,6 +157,24 @@ public class NotificationsFragment extends Fragment {
             }
         });
 
+        viewAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle data = new Bundle();
+                data.putString("type","Available Deals");
+                Navigation.findNavController(getActivity(),R.id.nav_host_fragment).navigate(R.id.viewAll,data);
+
+            }
+        });
+        viewAll2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle data = new Bundle();
+                data.putString("type","Current Running Auctions");
+                Navigation.findNavController(getActivity(),R.id.nav_host_fragment).navigate(R.id.viewAll,data);
+
+            }
+        });
         join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -250,19 +268,6 @@ public class NotificationsFragment extends Fragment {
             }
         });
 
-        viewAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        viewAll2.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-
-                                        }
-                                    }
-        );
         GetSells();
         return root;
     }
@@ -424,6 +429,8 @@ public class NotificationsFragment extends Fragment {
         });
         mRequestQueue.add(jsObjRequest);
     }
+
+
 
 
 }

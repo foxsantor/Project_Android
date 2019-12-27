@@ -116,5 +116,10 @@
         android:name="com.example.projeecto.CategoryView"
         android:label="fragment_category_view"
         tools:layout="@layout/fragment_category_view" />
+    <fragment
+        android:id="@+id/viewAll"
+        android:name="com.example.projeecto.viewAll"
+        android:label="fragment_view_all"
+        tools:layout="@layout/fragment_view_all" />
 
 </navigation>

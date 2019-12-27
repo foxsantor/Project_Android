@@ -4,7 +4,7 @@
     <stroke
         android:width="2dp"
         android:color="@color/colorPrimary" />
-    <solid android:color="@color/colorAccent" />
+    <solid android:color="@color/DrakLord" />
 
     <size
         android:height="60dp"

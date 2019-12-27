@@ -56,14 +56,10 @@ public class DealAdapter extends RecyclerView.Adapter <DealAdapter.myPartsViewHo
         String pricess = priceFormInflater(price);
 
 
-        String htmlText1= type.replace(searchText.toUpperCase(),"<font color='#536878'><strong>"+searchText.toUpperCase()+"</strong></font>");
-        String htmlText2 = name.replace(searchText.toUpperCase(),"<font color='#536878'><strong>"+searchText.toUpperCase()+"</strong></font>");
-        String htmlText3 = pricess.replace(searchText.toUpperCase(),"<font color='#536878'><strong>"+searchText.toUpperCase()+"</strong></font>");
+        String htmlText1= type.replace(searchText.toUpperCase(),"<font color='#536878'><strong>"+searchText+"</strong></font>");
+        String htmlText2 = name.replace(searchText.toUpperCase(),"<font color='#536878'><strong>"+searchText+"</strong></font>");
+        String htmlText3 = pricess.replace(searchText.toUpperCase(),"<font color='#536878'><strong>"+searchText+"</strong></font>");
 
-
-        String htmlText1x= htmlText1.replace(searchText,"<font color='#536878'><strong>"+searchText+"</strong></font>");
-        String htmlText2x = htmlText2.replace(searchText,"<font color='#536878'><strong>"+searchText+"</strong></font>");
-        String htmlText3x = htmlText3.replace(searchText,"<font color='#536878'><strong>"+searchText+"</strong></font>");
 
 
 
@@ -78,9 +74,9 @@ public class DealAdapter extends RecyclerView.Adapter <DealAdapter.myPartsViewHo
         //Color checkers + other fields inputs
 
 
-        holder.mTextViewName.setText(Html.fromHtml(htmlText2x));
-        holder.mTextViewType.setText(Html.fromHtml(htmlText1x));
-        holder.mTextViewPrice.setText("Price: "+Html.fromHtml(htmlText3x)+" TND");
+        holder.mTextViewName.setText(Html.fromHtml(htmlText2));
+        holder.mTextViewType.setText(Html.fromHtml(htmlText1));
+        holder.mTextViewPrice.setText("Price: "+Html.fromHtml(htmlText3)+" TND");
         holder.mImageView.setImageBitmap(bmp);
 
 
@@ -129,7 +125,6 @@ public class DealAdapter extends RecyclerView.Adapter <DealAdapter.myPartsViewHo
         myparts = sells;
         this.lisnter=listener;
         this.searchText = text;
-        notifyDataSetChanged();
     }
 
     public static String priceFormInflater(Float price)

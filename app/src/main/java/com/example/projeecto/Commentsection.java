@@ -12,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,7 +58,8 @@ public class Commentsection extends Fragment {
 
     private String username;
     private RequestQueue requestQueue;
-    private ConstraintLayout loading,view;
+    private ConstraintLayout loading,view,noComment;
+    private ProgressBar loadingDown;
     private RecyclerView mRecyclerView;
     private ArrayList<Comment> commentList;
     private ArrayList<Votes> votesList;
@@ -78,6 +81,8 @@ public class Commentsection extends Fragment {
         loading = root.findViewById(R.id.loading);
         view = root.findViewById(R.id.view);
         mRecyclerView = root.findViewById(R.id.comments);
+        noComment = root.findViewById(R.id.nocomment);
+        loadingDown = root.findViewById(R.id.progress_bar_);
         username = loadUsername();
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -277,8 +282,15 @@ public class Commentsection extends Fragment {
                                     }
                                 });
                                 mRecyclerView.setAdapter(adapter);
-                                adapter.notifyDataSetChanged();
-                                loading.setVisibility(View.GONE);
+                                final Handler handlers = new Handler();
+                                handlers.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loading.setVisibility(View.GONE);
+                                        view.setVisibility(View.VISIBLE);
+                                    }
+                                }, 1500);
+
                                 //loadingBar.setVisibility(View.GONE);
                             }
                         } catch (JSONException e) {
@@ -290,6 +302,7 @@ public class Commentsection extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 loading.setVisibility(View.GONE);
+                view.setVisibility(View.GONE);
                 error.printStackTrace();
                 return;
             }
