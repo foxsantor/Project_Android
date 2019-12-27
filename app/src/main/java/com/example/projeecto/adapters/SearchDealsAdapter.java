@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.projeecto.R;
 import com.example.projeecto.entities.Parts;
 import com.google.android.material.button.MaterialButton;
@@ -97,8 +98,9 @@ public class SearchDealsAdapter extends RecyclerView.Adapter<SearchDealsAdapter.
 
 
         byte[] image = currentItem.getImage();
-        Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
-        holder.image.setImageBitmap(bmp);
+        Glide.with(mContext).asBitmap().load(image).into(holder.image);
+        //Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
+        //holder.image.setImageBitmap(bmp);
         holder.views.setText(vues);
 
         //Picasso.with(mContext).load(imageUrl).fit().centerInside().into(holder.mImageView);

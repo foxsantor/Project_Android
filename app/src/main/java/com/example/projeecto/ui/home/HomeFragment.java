@@ -51,7 +51,7 @@ public class HomeFragment extends Fragment {
         hider = root.findViewById(R.id.hider);
 
         bookmarks.setLayoutManager(new LinearLayoutManager(getContext()));
-        final BookmarksAdaptar adapter = new BookmarksAdaptar();
+        final BookmarksAdaptar adapter = new BookmarksAdaptar(getActivity());
         bookmarks.setAdapter(adapter);
         bookmarkViewModel.getAllParts().observe(this, new Observer<List<Parts>>() {
             @Override

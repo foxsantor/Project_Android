@@ -243,7 +243,7 @@ public class Commentsection extends Fragment {
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
-                                    if (state != 1)
+                                    if (state == 0 || state  == 2 )
                                         commentList.add(new Comment(idComments, dealid, votes, text, MainActivity.capitalize(lastname) + " " + MainActivity.capitalize(firstname), date, votesList,username,state));
                                     }
                                     adapter = new CommentAdapter(getActivity(), commentList, new CommentAdapter.OnClickedListner() {

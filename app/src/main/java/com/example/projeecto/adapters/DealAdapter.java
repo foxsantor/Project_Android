@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.projeecto.MainActivity;
 import com.example.projeecto.R;
 import com.example.projeecto.entities.Parts;
@@ -56,9 +57,9 @@ public class DealAdapter extends RecyclerView.Adapter <DealAdapter.myPartsViewHo
         String pricess = priceFormInflater(price);
 
 
-        String htmlText1= type.replace(searchText.toUpperCase(),"<font color='#536878'><strong>"+searchText+"</strong></font>");
-        String htmlText2 = name.replace(searchText.toUpperCase(),"<font color='#536878'><strong>"+searchText+"</strong></font>");
-        String htmlText3 = pricess.replace(searchText.toUpperCase(),"<font color='#536878'><strong>"+searchText+"</strong></font>");
+        String htmlText1= type.replace(searchText,"<font color='#536878'><strong>"+searchText+"</strong></font>");
+        String htmlText2 = name.replace(searchText,"<font color='#536878'><strong>"+searchText+"</strong></font>");
+        String htmlText3 = pricess.replace(searchText,"<font color='#536878'><strong>"+searchText+"</strong></font>");
 
 
 
@@ -69,15 +70,14 @@ public class DealAdapter extends RecyclerView.Adapter <DealAdapter.myPartsViewHo
 
         //image Reader
         byte[] image = currentItem.getImage();
-        Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
+        //Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
 
         //Color checkers + other fields inputs
-
-
+        Glide.with(mContext).asBitmap().load(image).into(holder.mImageView);
         holder.mTextViewName.setText(Html.fromHtml(htmlText2));
         holder.mTextViewType.setText(Html.fromHtml(htmlText1));
         holder.mTextViewPrice.setText("Price: "+Html.fromHtml(htmlText3)+" TND");
-        holder.mImageView.setImageBitmap(bmp);
+       // holder.mImageView.setImageBitmap(bmp);
 
 
         //Picasso.with(mContext).load(imageUrl).fit().centerInside().into(holder.mImageView);

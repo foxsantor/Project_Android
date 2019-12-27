@@ -1,5 +1,6 @@
 package com.example.projeecto.adapters;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.Html;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.projeecto.R;
 import com.example.projeecto.entities.Parts;
 
@@ -20,9 +22,11 @@ import com.example.projeecto.entities.Parts;
 public class BookmarksAdaptar extends ListAdapter<Parts,BookmarksAdaptar.BookmarksHolder> {
 
     private OnItemClickLisnter lisnter;
+    private Context mContext;
 
-    public BookmarksAdaptar() {
+    public BookmarksAdaptar(Context context) {
         super(DIFF_CALLBACK);
+        this.mContext = context;
     }
 
     private static final DiffUtil.ItemCallback<Parts> DIFF_CALLBACK = new DiffUtil.ItemCallback<Parts>() {
@@ -58,13 +62,13 @@ public class BookmarksAdaptar extends ListAdapter<Parts,BookmarksAdaptar.Bookmar
         Float price = currentItem.getPrice();
         String pricess = priceFormInflater(price);
         byte[] image = currentItem.getImage();
-        Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
-
+        //Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
+        Glide.with(mContext).asBitmap().load(image).into(holder.mImageView);
         //Color checkers + other fields inputs
         holder.mTextViewName.setText(name);
         holder.mTextViewType.setText(type);
         holder.mTextViewPrice.setText("Price: "+price+" TND");
-        holder.mImageView.setImageBitmap(bmp);
+        //holder.mImageView.setImageBitmap(bmp);
         // for int types
     }
 

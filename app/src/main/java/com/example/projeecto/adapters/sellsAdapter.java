@@ -23,6 +23,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.projeecto.R;
 import com.example.projeecto.entities.Parts;
 import com.example.projeecto.tools.ImageHelper;
@@ -68,8 +69,8 @@ public class sellsAdapter extends RecyclerView.Adapter<sellsAdapter.SellsViewHol
         String vues = String.valueOf(currentItem.getVues());
         //image Reader
         byte[] image = currentItem.getImage();
-        Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
-
+        //Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
+        Glide.with(mContext).asBitmap().load(image).into(holder.mImageView);
         //Color checkers + other fields inputs
         if(other1.isEmpty())
         {
@@ -131,7 +132,7 @@ public class sellsAdapter extends RecyclerView.Adapter<sellsAdapter.SellsViewHol
         holder.mTextViewName.setText(name);
         holder.mTextViewPrice.setText(priceFormInflater(price)+" TND");
         holder.mTextViewType.setText(type);
-        holder.mImageView.setImageBitmap(bmp);
+       // holder.mImageView.setImageBitmap(bmp);
         holder.mTextViewOwner.setText(owner);
         holder.views.setText(vues);
 

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.projeecto.R;
 import com.example.projeecto.entities.Parts;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -51,14 +52,14 @@ public void onBindViewHolder(myPartsViewHolder holder, int position) {
         String type = currentItem.getType();
         //image Reader
         byte[] image = currentItem.getImage();
-        Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
+        //Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
 
         //Color checkers + other fields inputs
 
-
+        Glide.with(mContext).asBitmap().load(image).into(holder.mImageView);
         holder.mTextViewName.setText(name);
         holder.mTextViewType.setText(type);
-        holder.mImageView.setImageBitmap(bmp);
+        //holder.mImageView.setImageBitmap(bmp);
 
 
         //Picasso.with(mContext).load(imageUrl).fit().centerInside().into(holder.mImageView);
