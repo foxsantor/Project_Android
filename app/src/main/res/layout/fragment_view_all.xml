@@ -191,6 +191,7 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     <fragment
         android:id="@+id/search_load_host"
         android:name="androidx.navigation.fragment.NavHostFragment"
