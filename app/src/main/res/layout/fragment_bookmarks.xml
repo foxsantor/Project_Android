@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/browser_actions_bg_grey">
+    android:background="@color/colorPrimary">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -56,7 +56,7 @@
         android:id="@+id/hider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/browser_actions_bg_grey"
+        android:background="@color/colorPrimary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,8 +76,8 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/browser_actions_bg_grey"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
             android:padding="16dp"
             android:text="Bookmarked Deals"
             android:textSize="18sp"
@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="45dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="10dp"
             android:text="Swipe the deal to remove"
             android:textSize="12sp" />
 
@@ -141,6 +141,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
         android:clickable="true"
+        app:backgroundTint="@color/DrakLord"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.982"

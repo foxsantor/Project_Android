@@ -11,7 +11,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.projeecto.DAO.BookmarkDAO;
 
-@Database(entities = Parts.class,version = 5 )
+@Database(entities = Parts.class,version = 5)
+
 public abstract class BookmarkDB  extends RoomDatabase {
 
     private static BookmarkDB instance;

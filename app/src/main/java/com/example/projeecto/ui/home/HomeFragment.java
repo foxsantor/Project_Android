@@ -40,6 +40,11 @@ public class HomeFragment extends Fragment {
     private TextView swipe;
 
 
+    public static HomeFragment newInstance() {
+        HomeFragment fragment = new HomeFragment();
+        return fragment;
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         bookmarkViewModel= ViewModelProviders.of(this).get(BookmarkViewModel.class);
