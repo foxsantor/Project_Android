@@ -21,7 +21,7 @@ import android.widget.ProgressBar;
 import com.example.projeecto.tools.OnbackDestrecution;
 
 
-public class RegisterFragment_1 extends Fragment implements OnbackDestrecution {
+public class RegisterFragment_1 extends Fragment  {
 
 
     public static RegisterFragment_1 newInstance() {
@@ -31,7 +31,7 @@ public class RegisterFragment_1 extends Fragment implements OnbackDestrecution {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        OnbackDestrecution();
+
 
     }
 
@@ -46,7 +46,7 @@ public class RegisterFragment_1 extends Fragment implements OnbackDestrecution {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_register_fragment_1, container, false);
-        OnbackDestrecution();
+
 
 
 
@@ -60,13 +60,7 @@ public class RegisterFragment_1 extends Fragment implements OnbackDestrecution {
         editor.commit();
 
     }
-    @Override
-    public void OnbackDestrecution() {
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
 
-    }
 
 
 

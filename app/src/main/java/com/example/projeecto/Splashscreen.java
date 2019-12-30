@@ -19,7 +19,7 @@ public class Splashscreen extends AppCompatActivity {
                 .withBackgroundResource(R.drawable.ic_launcher_background);
         View splashscreen = config.create();
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
+       // getSupportActionBar().hide();
         setContentView(splashscreen);
 
     }

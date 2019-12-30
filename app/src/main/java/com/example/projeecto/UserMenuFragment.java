@@ -3,6 +3,7 @@ package com.example.projeecto;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,10 +35,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.projeecto.adapters.SectionsPagerAdapter;
 import com.example.projeecto.tools.OnbackDestrecution;
 import com.example.projeecto.tools.ProgressBarAnimation;
 import com.facebook.login.LoginManager;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -57,13 +61,15 @@ public class UserMenuFragment extends Fragment{
     private Button persodata,myGarage;
     private RequestQueue requestQueue;
     private MaterialButton logout;
-    private ConstraintLayout hider;
+    private ConstraintLayout hider,lois ;
+    private AppBarLayout appbar;
     private ImageButton refresh;
+    private ImageView background;
+    public static int checker = 0;
     private  String lastName_t,firstName_t,created;
-    private static int checker =0;
     private String username;
     private TextView avatar2,textView44,textView48;
-    private  static final  String URL =MainActivity.SKELETON+"getUser";//http://10.0.2.2:5000/api/getUser";
+    private  static final  String URL = MainActivity.SKELETON+"getUser";
 
     public static UserMenuFragment newInstance() {
         return new UserMenuFragment();
@@ -84,14 +90,13 @@ public class UserMenuFragment extends Fragment{
         avatar2 = view.findViewById(R.id.avatar2);
         textView44 = view.findViewById(R.id.textView44);
         textView48 = view.findViewById(R.id.textView48);
+        refresh = view.findViewById(R.id.refresh);
+        hider = view.findViewById(R.id.layouthider);
+        appbar = view.findViewById(R.id.appbar);
+        lois = view.findViewById(R.id.lois);
+        background = view.findViewById(R.id.imageView11);
+        Glide.with(getActivity()).asDrawable().load(R.drawable.background).into(background);
         getUserData();
-        loadDataForm();
-
-
-
-
-
-
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
@@ -104,7 +109,7 @@ public class UserMenuFragment extends Fragment{
         persodata.setOnClickListener(new View.OnClickListener() {
                                          @Override
                                          public void onClick(View v) {
-         Navigation.findNavController(getView()).navigate(R.id.action_emptyfragi_to_user_account);
+         Navigation.findNavController(getActivity(),R.id.nav_host_fragment).navigate(R.id.user_account);
 
                                          }
                                      }
@@ -153,10 +158,10 @@ public class UserMenuFragment extends Fragment{
 
     public  void getUserData() {
 
+        //hider.setVisibility(View.GONE);
         username=loadUsername();
         requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.start();
-
         HashMap< String, String > params = new HashMap<String, String>();
         params.put("username", username);
         // the entered data as the JSON body.
@@ -184,19 +189,20 @@ public class UserMenuFragment extends Fragment{
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-
+                                if(checker == 0){
                                          saveDataUser(jresponse.getString("username"),
                                                  firstName_t,
                                                  lastName_t,
                                         jresponse.getString("tele_num"),
                                         jresponse.getString("address"),
-                                                 jresponse.getString("provider_facebook"),created);
-
-
-                            }else
-                            {
-                                Toast.makeText(getActivity(), "error retrieving data", Toast.LENGTH_SHORT).show();
+                                                 jresponse.getString("provider_facebook"),created,jresponse.getString("modified"));
+                                checker =1;
                             }
+                            }
+                            //lois.setVisibility(View.VISIBLE);
+                            //appbar.setVisibility(View.VISIBLE);
+
+                            loadDataForm();
                         } catch (JSONException e) {
 
                             e.printStackTrace();
@@ -205,7 +211,10 @@ public class UserMenuFragment extends Fragment{
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                //lois.setVisibility(View.GONE);
+                //appbar.setVisibility(View.GONE);
+                //hider.setVisibility(View.VISIBLE);
+                loadDataForm();
                 error.printStackTrace();
                 return;
 
@@ -224,9 +233,9 @@ public class UserMenuFragment extends Fragment{
         username = sharedPreferences.getString("email","");
         return username;
     }
-    public void saveDataUser(String username , String firstName , String lastname,String mobile,String address,String provider,String created)
+    public void saveDataUser(String username , String firstName , String lastname,String mobile,String address,String provider,String created,String modified)
     {
-        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("share", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("care", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("email",username);
         editor.putString("first_name",firstName);
@@ -235,12 +244,13 @@ public class UserMenuFragment extends Fragment{
         editor.putString("address",address);
         editor.putString("Provider_facebook",provider);
         editor.putString("created",created);
+        editor.putString("modified",modified);
         editor.apply();
 
     }
     private void loadDataForm()
     {
-        SharedPreferences sharedPreferences=this.getActivity().getSharedPreferences("share", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences=this.getActivity().getSharedPreferences("care", Context.MODE_PRIVATE);
          lastName_t = sharedPreferences.getString("last_name","");
          firstName_t = sharedPreferences.getString("first_name","");
          String createds = sharedPreferences.getString("created","");
@@ -255,7 +265,6 @@ public class UserMenuFragment extends Fragment{
             e.printStackTrace();
         }
         textView44.setText(MainActivity.capitalize(lastName_t)+" "+MainActivity.capitalize(firstName_t));
-        avatar2.setText(""+lastName_t.toUpperCase().charAt(0));
-
+        avatar2.setText(lastName_t.toUpperCase().charAt(0)+"");
     }
 }

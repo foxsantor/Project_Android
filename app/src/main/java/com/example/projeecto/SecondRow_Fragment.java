@@ -53,7 +53,7 @@ import java.util.HashMap;
 import java.util.regex.Pattern;
 
 
-public class SecondRow_Fragment extends Fragment implements OnbackDestrecution , Dialogue.DialogueListener {
+public class SecondRow_Fragment extends Fragment implements Dialogue.DialogueListener {
     private ProgressBar progressBar;
     private TextView second , end;
     private Button Register;
@@ -77,7 +77,6 @@ public class SecondRow_Fragment extends Fragment implements OnbackDestrecution ,
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        OnbackDestrecution();
         emails = view.findViewById(R.id.Email);
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
@@ -110,7 +109,7 @@ public class SecondRow_Fragment extends Fragment implements OnbackDestrecution ,
                              ViewGroup container, Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_second_row_, container, false);
-        OnbackDestrecution();
+
         Register = root.findViewById(R.id.register_p);
         emails = root.findViewById(R.id.Email);
         password = root.findViewById(R.id.password_r);
@@ -239,14 +238,6 @@ public class SecondRow_Fragment extends Fragment implements OnbackDestrecution ,
         return root;
     }
 
-    @Override
-    public void OnbackDestrecution() {
-
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
-
-    }
 
     public void saveEmailRegister( String email )
     {

@@ -38,7 +38,7 @@ import java.util.HashMap;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContactInterface extends Fragment  implements OnbackDestrecution {
+public class ContactInterface extends Fragment  {
 
 
 
@@ -59,14 +59,14 @@ public class ContactInterface extends Fragment  implements OnbackDestrecution {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        OnbackDestrecution();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        OnbackDestrecution();
+
         return inflater.inflate(R.layout.fragment_contact_interface, container, false);
     }
 
@@ -75,7 +75,6 @@ public class ContactInterface extends Fragment  implements OnbackDestrecution {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-        OnbackDestrecution();
         email = view.findViewById(R.id.email);
         call = view.findViewById(R.id.call);
         chat = view.findViewById(R.id.chat);
@@ -175,14 +174,7 @@ public class ContactInterface extends Fragment  implements OnbackDestrecution {
         requestQueue.add(jsObjRequest);
     }
 
-    @Override
-    public void OnbackDestrecution() {
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
-
-    }
 
 
 }

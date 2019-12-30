@@ -70,6 +70,7 @@
                     android:hint="@android:string/search_go"
                     app:boxStrokeColor="#803B3F42"
                     app:endIconMode="clear_text"
+                    app:endIconDrawable="@drawable/ic_cancel_black_24dp"
                     app:errorEnabled="false"
                     app:hintEnabled="true"
                     app:hintTextColor="#803B3F42"

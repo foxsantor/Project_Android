@@ -101,7 +101,7 @@ public class myGarage_fragment extends Fragment {
         addPart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_myGarage_fragment_to_add_part_fragment);
+                Navigation.findNavController(getActivity(),R.id.nav_host_fragment).navigate(R.id.add_part_fragment);
             }
         });
 

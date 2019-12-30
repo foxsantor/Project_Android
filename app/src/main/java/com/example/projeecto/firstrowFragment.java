@@ -31,7 +31,7 @@ import com.example.projeecto.tools.ProgressBarAnimation;
 import com.google.android.material.textfield.TextInputLayout;
 
 
-public class firstrowFragment extends Fragment implements OnbackDestrecution {
+public class firstrowFragment extends Fragment  {
 
     ProgressBar progressBar;
     TextView second;
@@ -42,7 +42,7 @@ public class firstrowFragment extends Fragment implements OnbackDestrecution {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        OnbackDestrecution();
+
 
 
         next = view.findViewById(R.id.next);
@@ -190,20 +190,14 @@ public class firstrowFragment extends Fragment implements OnbackDestrecution {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_firstrow, container, false);
-        OnbackDestrecution();
+
 
 
         return root;
     }
 
 
-    @Override
-    public void OnbackDestrecution() {
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
 
-    }
     public void saveDataRegister( String firstName , String lastname,String mobile,String address)
     {
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("check", Context.MODE_PRIVATE);

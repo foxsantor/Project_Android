@@ -35,6 +35,8 @@ public class HomeFragmment extends Fragment {
     private Button clear;
     private boolean exit = false;
     private String saver ="" ;
+    private static int karma = 0;
+    private static View saved;
 
 
     public HomeFragmment() {
@@ -46,7 +48,12 @@ public class HomeFragmment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.home_fragmment, container, false);
+        View root = inflater.inflate(R.layout.home_fragmment, container, false);
+
+            return root;
+
+
+
     }
 
     @Override

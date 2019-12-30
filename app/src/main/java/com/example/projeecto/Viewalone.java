@@ -58,6 +58,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.projeecto.ViewModels.BookmarkViewModel;
 import com.example.projeecto.adapters.CommentAdapter;
 import com.example.projeecto.adapters.myPartsAdapter;
@@ -86,7 +87,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 
-public class Viewalone extends Fragment implements OnbackDestrecution {
+public class Viewalone extends Fragment {
 
     TextView Created, name, owner, other1, other2, other3, refrence, tag_description, price, type, other1_v, other2_v, other3_v, portrait,vues,num;
     ImageButton shopping,edit,toggel,back;
@@ -110,7 +111,7 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_viewalone, container, false);
-        OnbackDestrecution();
+
         Created = view.findViewById(R.id.date_a);
         num = view.findViewById(R.id.num);
         Contact = view.findViewById(R.id.Contact);
@@ -245,7 +246,8 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
             type.setText(data.getString("Type"));
             byte[] image = data.getByteArray("image");
             Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
-            imageView.setImageBitmap(bmp);
+            Glide.with(getActivity()).asBitmap().load(bmp).into(imageView);
+            //imageView.setImageBitmap(bmp);
 
 
         }
@@ -364,7 +366,7 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        OnbackDestrecution();
+
 
 
         Contact.setOnClickListener(new View.OnClickListener() {
@@ -420,13 +422,7 @@ public class Viewalone extends Fragment implements OnbackDestrecution {
 
 
 
-    @Override
-    public void OnbackDestrecution() {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
 
-    }
 
     private void saveDeal() {
         Bundle data = getArguments();

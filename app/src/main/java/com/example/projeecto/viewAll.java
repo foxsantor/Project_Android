@@ -48,7 +48,7 @@ public class viewAll extends Fragment {
     private Button Cheapst,nwest,popular;
     private TextInputLayout searchgo;
     private TextView textDA;
-    private String type,saver;
+    private String type,saver = "";
     private ConstraintLayout layout;
     private boolean isKeyboardShowing = false;
 
@@ -208,27 +208,7 @@ public class viewAll extends Fragment {
         });
 
 
-        searchgo.getEditText().setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
 
-                    if(!saver.equals(searchgo.getEditText().getText().toString()))
-                    {
-                        Bundle searchData = new Bundle();
-                        searchData.putString("search",searchgo.getEditText().getText().toString());
-                        Navigation.findNavController(getActivity(), R.id.search_load_host).navigate(R.id.loadSearch,searchData);
-                    }else if(saver.equals(""))
-                    {
-                        Navigation.findNavController(getActivity(), R.id.search_load_host).navigate(R.id.loadSearch);
-                    }else
-                    {
-                        return false;
-                    }
-                }
-                return false;
-            }
-        });
 
         searchgo.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -258,13 +238,4 @@ public class viewAll extends Fragment {
         });
         return root;
     }
-
-
-
-
-
-
-
-
-
 }

@@ -70,7 +70,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 
-public class add_part_fragment extends Fragment implements OnbackDestrecution {
+public class add_part_fragment extends Fragment  {
 
     private ImageView container,ImageView10;
     private static final int GALLERY_REQUEST = 1;
@@ -109,7 +109,7 @@ public class add_part_fragment extends Fragment implements OnbackDestrecution {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.add_part_fragment, container, false);
-        OnbackDestrecution();
+
 
 
 
@@ -121,7 +121,7 @@ public class add_part_fragment extends Fragment implements OnbackDestrecution {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        OnbackDestrecution();
+
 
         username = getUsername();
         container = view.findViewById(R.id.image_container);
@@ -327,13 +327,7 @@ public class add_part_fragment extends Fragment implements OnbackDestrecution {
 
     }
 
-    @Override
-    public void OnbackDestrecution() {
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(false);
-    }
 
     private String transformerImageBase64(ImageView container)
     {
@@ -377,7 +371,7 @@ public class add_part_fragment extends Fragment implements OnbackDestrecution {
                         Glide.with(getActivity()).asBitmap().load(bitmap).into(container);
                         //container.setImageBitmap(bitmap);
                        // Glide.with(getActivity()).asBitmap().load(bitmap).into(ImageView10);
-                        ImageView10.setImageBitmap(bitmap);
+                        //ImageView10.setImageBitmap(bitmap);
                         base64Code=transformerImageBase64(ImageView10);
                     } catch (IOException e) {
                         Log.i("TAG", "Some exception " + e);

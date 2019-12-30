@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.projeecto.R;
 import com.example.projeecto.entities.CategoryItems;
 
@@ -53,7 +54,8 @@ public class CategoryAdapter extends BaseAdapter {
         final ImageView imageView = convertView.findViewById(R.id.categoryimage);
         final TextView nameTextView = convertView.findViewById(R.id.categoryname);
         // 4
-        imageView.setImageResource(categoryItems.getImage());
+
+        Glide.with(mContext).asDrawable().load(categoryItems.getImage()).into(imageView);
         nameTextView.setText(categoryItems.getName());
         return convertView;
     }

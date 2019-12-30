@@ -119,7 +119,7 @@ public class AuthenticationFragment extends Fragment {
     private void loadFragment(View view){
 
 
-        Navigation.findNavController(view).navigate(R.id.action_navigation_account_to_emptyfragi);
+        Navigation.findNavController(getActivity(),R.id.nav_host_fragment).navigate(R.id.emptyfragi);
 
     }
 
@@ -128,6 +128,7 @@ public class AuthenticationFragment extends Fragment {
         SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("share", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("email",username);
+
         editor.apply();
 
     }
