@@ -371,7 +371,7 @@ public class add_part_fragment extends Fragment  {
                         Glide.with(getActivity()).asBitmap().load(bitmap).into(container);
                         //container.setImageBitmap(bitmap);
                        // Glide.with(getActivity()).asBitmap().load(bitmap).into(ImageView10);
-                        //ImageView10.setImageBitmap(bitmap);
+                        ImageView10.setImageBitmap(bitmap);
                         base64Code=transformerImageBase64(ImageView10);
                     } catch (IOException e) {
                         Log.i("TAG", "Some exception " + e);

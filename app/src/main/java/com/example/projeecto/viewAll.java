@@ -201,7 +201,7 @@ public class viewAll extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle key = new Bundle();
-                key.putString("key","Created DESC");
+                key.putString("key","sellable_date DESC");
                 Navigation.findNavController(getActivity(),R.id.search_load_host).navigate(R.id.loadSearch,key);
 
             }

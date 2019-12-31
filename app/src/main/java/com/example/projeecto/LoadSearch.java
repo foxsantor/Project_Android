@@ -134,7 +134,7 @@ public class LoadSearch extends Fragment {
                         String other2 = hit.getString("other2");
                         String other3 = hit.getString("other3");
                         String tag_description = hit.getString("tag_description");
-                        String created = hit.getString("Created");
+                        String created = hit.getString("sellable_date");
                         String type = hit.getString("Type");
                         String state = hit.getString("state");
                         String images = hit.getString("String_image");
@@ -234,7 +234,7 @@ public class LoadSearch extends Fragment {
                         String other2 = hit.getString("other2");
                         String other3 = hit.getString("other3");
                         String tag_description = hit.getString("tag_description");
-                        String created = hit.getString("Created");
+                        String created = hit.getString("sellable_date");
                         String type = hit.getString("Type");
                         String state = hit.getString("state");
                         String images = hit.getString("String_image");
@@ -371,7 +371,7 @@ public class LoadSearch extends Fragment {
                                             String other2 = hit.getString("other2");
                                             String other3 = hit.getString("other3");
                                             String tag_description = hit.getString("tag_description");
-                                            String created = hit.getString("Created");
+                                            String created = hit.getString("sellable_date");
                                             String type = hit.getString("Type");
                                             String state = hit.getString("state");
                                             String images = hit.getString("String_image");

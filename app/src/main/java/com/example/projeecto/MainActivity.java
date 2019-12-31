@@ -25,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.projeecto.tools.Dialogue;
@@ -47,6 +48,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private ConstraintLayout container;
     private static boolean res;
     private static Context conx;
-    private boolean response;
+    private static boolean  hasConnection = false;
     private FragmentManager fragmentManager;
     boolean isKeyboardShowing = false;
 
@@ -156,6 +158,30 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences=this.getSharedPreferences("share",Context.MODE_PRIVATE);
         username = sharedPreferences.getString("email","");
         return username;
+    }
+    public static boolean getConnction()
+    {
+
+        requestQueue = Volley.newRequestQueue(conx);
+        requestQueue.start();
+        JsonObjectRequest request = new JsonObjectRequest (Request.Method.GET, SKELETON, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                hasConnection =true;
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                error.printStackTrace();
+                hasConnection = false;
+                return;
+
+            }
+        });
+        requestQueue.add(request);
+        return hasConnection;
     }
 
 

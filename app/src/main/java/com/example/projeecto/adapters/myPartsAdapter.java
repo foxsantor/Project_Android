@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.projeecto.MainActivity;
 import com.example.projeecto.R;
 import com.example.projeecto.entities.Parts;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -57,8 +58,8 @@ public void onBindViewHolder(myPartsViewHolder holder, int position) {
         //Color checkers + other fields inputs
 
         Glide.with(mContext).asBitmap().load(image).into(holder.mImageView);
-        holder.mTextViewName.setText(name);
-        holder.mTextViewType.setText(type);
+        holder.mTextViewName.setText(type);
+    holder.mTextViewType.setText(MainActivity.capitalize(name));
         //holder.mImageView.setImageBitmap(bmp);
 
 

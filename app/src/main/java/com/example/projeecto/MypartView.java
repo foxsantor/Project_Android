@@ -3,50 +3,74 @@ package com.example.projeecto;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.palette.graphics.Palette;
 
 import android.provider.MediaStore;
+import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.projeecto.adapters.spinnerAdapter;
 import com.example.projeecto.tools.editText2;
 import com.android.volley.RequestQueue;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 
@@ -56,7 +80,7 @@ import java.util.HashMap;
 public class MypartView extends Fragment {
 
 
-    private ImageView container;
+    private ImageView container,dummy;
     private FloatingActionButton addImage,addImageCamera;
     private static final int GALLERY_REQUEST = 1;
     private String base64Code,idparts,cateegory,o1,o2,o3,statusSell;
@@ -64,13 +88,21 @@ public class MypartView extends Fragment {
     private static final int CAMERA_REQUEST=3;
     private static final String URL = MainActivity.SKELETON+"parts/updatePart";
     private static final String URL1 = MainActivity.SKELETON+"parts/addSell";
-    private Button others,close1,close2,close3,save,sell;
+    private static final String URL_Neutralizer = MainActivity.SKELETON+"parts/neutralizeParts";
+    private TextView creationDate,numberComments,numberViews;
+    private Switch activator;
+    private Toolbar toolbar;
+    private AppBarLayout appbar;
+    private ImageButton others,close1,close2,close3;
+    private Menu collapsedMenu;
+    private CollapsingToolbarLayout collaspsing;
+    private boolean appBarExpanded=true;
+    private static final String URL_GETSELL = MainActivity.SKELETON+"parts/getUsernameandComments";
+    private Button save,stateButton,refresh;
     private RequestQueue requestQueue;
     private Spinner category;
-    private EditText tag_desc;
-    private editText2 price;
-    private ConstraintLayout otherSets,other1Set,other2Set,other3Set,loading;
-    private TextInputLayout other1x,other2x,other3x,other1,other2,other3,name,refrence;
+    private ConstraintLayout otherSets,other1Set,other2Set,other3Set,loading,sellView,nocon;
+    private TextInputLayout other1x,other2x,other3x,other1,other2,other3,name,refrence,tag_desc,price,textInputLayoutspin;
 
     public MypartView() {
         // Required empty public constructor
@@ -81,7 +113,7 @@ public class MypartView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_mypart_view, container, false);
+        return inflater.inflate(R.layout.mypart_view, container, false);
     }
     private void SpinnerLoader(Spinner spinner)
     {
@@ -115,12 +147,25 @@ public class MypartView extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        price = view.findViewById(R.id.price);
-        container = view.findViewById(R.id.image_container);
+        setHasOptionsMenu(true);
+        creationDate = view.findViewById(R.id.creeationdate);
+        numberComments = view.findViewById(R.id.numberofcomments);
+        numberViews = view.findViewById(R.id.numberofview);
+        sellView = view.findViewById(R.id.sellview);
+        stateButton = view.findViewById(R.id.buttonsate);
+        textInputLayoutspin = view.findViewById(R.id.textInputLayoutspin);
+        price = view.findViewById(R.id.sellInput);
+        nocon = view.findViewById(R.id.nocon);
+        dummy = view.findViewById(R.id.dummy);
+        activator = view.findViewById(R.id.activator);
+        collaspsing = view.findViewById(R.id.collaspsing);
+        toolbar = view.findViewById(R.id.toolbar);
+        container = view.findViewById(R.id.app_bar_image);
         addImage = view.findViewById(R.id.addImage);
         addImageCamera= view.findViewById(R.id.seealone);
         category =  view.findViewById(R.id.Category);
+        refresh = view.findViewById(R.id.refresh);
+        appbar = view.findViewById(R.id.appbar);
         SpinnerLoader(category);
         others = view.findViewById(R.id.others);
         otherSets = view.findViewById(R.id.othersets);
@@ -141,7 +186,36 @@ public class MypartView extends Fragment {
         other2x = view.findViewById(R.id.other2x);
         other3x = view.findViewById(R.id.other3x);
         loading = view.findViewById(R.id.loading_1);
-        sell = view.findViewById(R.id.sell);
+        //sell = view.findViewById(R.id.sell);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitle("");
+        if(!haveNetworkConnection())
+        {
+            nocon.setVisibility(View.VISIBLE);
+            activator.setEnabled(false);
+            save.setEnabled(false);
+            save.setClickable(false);
+        }
+
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(haveNetworkConnection())
+                {
+                    activator.setEnabled(true);
+                    save.setEnabled(true);
+                    save.setClickable(true);
+                    nocon.setVisibility(View.GONE);
+                }else
+                {
+                    return;
+                }
+            }
+        });
+
+
 
         Bundle data = getArguments();
 
@@ -172,23 +246,56 @@ public class MypartView extends Fragment {
                 otherSets.setVisibility(View.VISIBLE);
                 other3Set.setVisibility(View.VISIBLE);
                 o3 =data.getString("other3");
+
+                DateCreated(data.getString("Created"));
                 String[] other3TextView;
                 other3TextView = o3.split(",");
                 other3x.getEditText().setText(other3TextView[0]);
                 other3.getEditText().setText(other3TextView[1]);}
 
+            if(data.getString("Sell").equals("YES"))
+            {
+               activator.setChecked(true);
+               sellView.setVisibility(View.VISIBLE);
+               price.getEditText().setText(String.valueOf(data.getFloat("Price")));
+            }
+
             //other1.setText(data.getString("other1"));
             //other2.setText(data.getString("other2"));
             //other3.setText(data.getString("other3"));
             refrence.getEditText().setText(data.getString("refrnce"));
-            tag_desc.setText(data.getString("tag_description"));
+            tag_desc.getEditText().setText(data.getString("tag_description"));
             cateegory=data.getString("Type");
             category.setSelection(getIndex(category,cateegory));
             byte[] image = data.getByteArray("image");
             Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
-            container.setImageBitmap(bmp);
+            Glide.with(getActivity()).asBitmap().load(bmp).into(container);
+
+            /*Palette.from(bmp).generate(new Palette.PaletteAsyncListener() {
+                @Override
+                public void onGenerated(Palette palette) {
+                    int vibrantColor = palette.getVibrantColor(getResources().getColor(R.color.DrakLord));
+                    collaspsing.setContentScrimColor(vibrantColor);
+                    collaspsing.setStatusBarScrimColor(getResources().getColor(R.color.colorPrimary));
+                }
+            });*/
 
         }
+        appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                //Log.d(User_account.class.getSimpleName(), "onOffsetChanged: verticalOffset: " + verticalOffset);
+                //  Vertical offset == 0 indicates appBar is fully expanded.
+                if (Math.abs(verticalOffset) == 336) {
+                    appBarExpanded = false;
+
+                    getActivity().invalidateOptionsMenu();
+                } else {
+                    appBarExpanded = true;
+                    getActivity().invalidateOptionsMenu();
+                }
+            }
+        });
 
 
         others.setOnClickListener(new View.OnClickListener() {
@@ -280,7 +387,7 @@ public class MypartView extends Fragment {
 
 
 
-        addImage.setOnClickListener(new View.OnClickListener() {
+        /*addImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -289,11 +396,11 @@ public class MypartView extends Fragment {
                 startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
 
             }
-        });
+        });*/
 
 
 
-        addImageCamera.setOnClickListener(new View.OnClickListener() {
+       /* addImageCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -309,26 +416,52 @@ public class MypartView extends Fragment {
                 }
 
             }
-        });
+        });*/
 
         requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.start();
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UpadatePart();
+                if(!validateEmpty(name,"Name")  | !validateSpinner(cateegory) | !validateOthers(other1x,other1) | !validateOthers(other2x,other2)| !validateOthers(other3x,other3)) {return;}else{
+                    UpadatePart();}
+
             }
         });
-
-        sell.setOnClickListener(new View.OnClickListener() {
+        activator.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                {
+                    sellView.setVisibility(View.VISIBLE);
 
-                AddSell();
+                }else
+                {
+                    sellView.setVisibility(View.GONE);
+                    Neutralize();
 
+                }
             }
         });
 
+
+        price.getEditText().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction()!=KeyEvent.ACTION_DOWN){
+                    return false;}
+                if(keyCode == KeyEvent.KEYCODE_ENTER ){
+                    if(!validateEmpty(price,"Price")){
+                        price.getEditText().requestFocus();
+                        return false;}else{
+                        AddSell();
+                        return true;
+                    }
+                }
+                return false;
+
+            }
+        });
     }
 
     private String transformerImageBase64(ImageView container)
@@ -355,8 +488,9 @@ public class MypartView extends Fragment {
                     Uri selectedImage = data.getData();
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
-                        container.setImageBitmap(bitmap);
-                        base64Code=transformerImageBase64(container);
+                        dummy.setImageBitmap(bitmap);
+                        Glide.with(getActivity()).asBitmap().load(bitmap).into(container);
+                        base64Code=transformerImageBase64(dummy);
                     } catch (IOException e) {
                         Log.i("TAG", "Some exception " + e);
                     }
@@ -365,8 +499,9 @@ public class MypartView extends Fragment {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK)
         {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
-            container.setImageBitmap(photo);
-            base64Code=transformerImageBase64(container);
+            Glide.with(getActivity()).asBitmap().load(photo).into(container);
+            dummy.setImageBitmap(photo);
+            base64Code=transformerImageBase64(dummy);
 
         }
     }
@@ -393,7 +528,7 @@ public class MypartView extends Fragment {
 
     private void UpadatePart()
     {
-        loading.setVisibility(View.VISIBLE);
+        //loading.setVisibility(View.VISIBLE);
 
         HashMap<String,String> params = sortData();
 
@@ -407,7 +542,7 @@ public class MypartView extends Fragment {
                         try {
                             if(response.has("succes")) {
 
-                                loading.setVisibility(View.GONE);
+                               // loading.setVisibility(View.GONE);
                                 Toast.makeText(getActivity(), ""+response.getString("succes"), Toast.LENGTH_SHORT).show();
                                 //openDialogue();
                             }
@@ -444,7 +579,7 @@ public class MypartView extends Fragment {
         other1_data = other1x.getEditText().getText().toString()+","+other1.getEditText().getText().toString();
         other2_data = other2x.getEditText().getText().toString()+","+other2.getEditText().getText().toString();
         other3_data = other3x.getEditText().getText().toString()+","+other3.getEditText().getText().toString();
-        tag_desc_data = tag_desc.getText().toString();
+        tag_desc_data = tag_desc.getEditText().getText().toString();
         type_data = cateegory;
 
         if(ref_data.equals("null"))
@@ -479,14 +614,54 @@ public class MypartView extends Fragment {
         return data;
     }
 
-    private void AddSell()
+    private void Neutralize()
     {
 
-        loading.setVisibility(View.VISIBLE);
+        //loading.setVisibility(View.VISIBLE);
         HashMap < String, String > params = new HashMap<String, String>();
 
         params.put("idparts", idparts);
-        params.put("price", price.getText().toString());
+        // the entered data as the JSON body.
+        JsonObjectRequest jsObjRequest = new
+                JsonObjectRequest(Request.Method.PUT,
+                URL_Neutralizer,
+                new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if(response.has("success")) {
+
+                                Toast.makeText(getActivity(), ""+response.getString("success"), Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+
+                            e.printStackTrace();
+                        }
+                       // loading.setVisibility(View.GONE);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getActivity(), "Connection Lost"+error.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("VOLLEY", error.getMessage());
+                return;
+            }
+        });
+
+        requestQueue.add(jsObjRequest);
+
+
+    }
+    private void AddSell()
+    {
+
+       // loading.setVisibility(View.VISIBLE);
+        HashMap < String, String > params = new HashMap<String, String>();
+
+        params.put("idparts", idparts);
+        params.put("price", price.getEditText().getText().toString());
         // the entered data as the JSON body.
         JsonObjectRequest jsObjRequest = new
                 JsonObjectRequest(Request.Method.PUT,
@@ -497,7 +672,7 @@ public class MypartView extends Fragment {
                     public void onResponse(JSONObject response) {
                         try {
                             if(response.has("success")) {
-                                loading.setVisibility(View.GONE);
+                                //loading.setVisibility(View.GONE);
                                 Toast.makeText(getActivity(), ""+response.getString("success"), Toast.LENGTH_SHORT).show();
 
                             }
@@ -510,7 +685,7 @@ public class MypartView extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getActivity(), "Connection Lost"+error.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("VOLLEY", error.getMessage());
+                return;
             }
         });
 
@@ -518,5 +693,186 @@ public class MypartView extends Fragment {
 
 
     }
+
+    private void getuseerComments(String username,int dealid)
+    {
+        requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.start();
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("username", username);
+        params.put("dealid", String.valueOf(dealid));
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, URL_GETSELL, new JSONObject(params), new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    for (int i = 0; i < response.length(); i++) {
+
+                        JSONObject hit = response.getJSONObject(i);
+                        String nums = String.valueOf(hit.getInt("result"));
+                        numberComments.setText(nums);
+
+                    }
+
+                } catch (JSONException e) {
+
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                error.printStackTrace();
+                return;
+
+            }
+        });
+
+        requestQueue.add(request);
+    }
+    private  boolean haveNetworkConnection() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+        boolean haveComnectedServr = false;
+
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+             if(MainActivity.getConnction())
+                 haveComnectedServr = true;
+        }
+        return haveConnectedWifi || haveConnectedMobile || haveComnectedServr;
+    }
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main_menu, menu);
+        collapsedMenu = menu;
+
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (collapsedMenu != null && !appBarExpanded) {
+            //collapsed
+        } else {
+            collapsedMenu.add("Camera")
+                    .setIcon(R.drawable.ic_photo_camera_accent_24dp)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            collapsedMenu.add("Gallary")
+                    .setIcon(R.drawable.ic_insert_photo_black_24dp)
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        }
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+        }
+        if (item.getTitle() == "Camera") {
+            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+            {
+
+                requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+            }
+            else
+            {
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            }
+        }
+        if (item.getTitle() == "Gallary") {
+            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            photoPickerIntent.setType("image/*");
+            startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private boolean validateEmpty(TextInputLayout text , String type)
+    {
+        String textToCheck = text.getEditText().getText().toString().trim();
+        if(textToCheck.isEmpty()){
+            text.setError(""+ type +" Can't be empty");
+            return false;}
+        else
+        {
+            text.setError(null);
+            return true;
+        }
+
+    }
+
+    private boolean validateSpinner(String spinner) {
+        if ((spinner == null || spinner.equals("") || spinner.isEmpty())) {
+            textInputLayoutspin.setError("Must Choose a Category !");
+            return false;
+        } else {
+            textInputLayoutspin.setError(null);
+            return true;
+
+        }
+    }
+
+    private boolean validateOthers(TextInputLayout Label, TextInputLayout container)
+    {
+
+        String textLabel =Label.getEditText().getText().toString();
+        String textConatiner = container.getEditText().getText().toString();
+        if(textLabel.isEmpty() && textConatiner.isEmpty())
+        {
+            Label.setError(null);
+            container.setError(null);
+            return true;
+        }else if (textConatiner.contains(","))
+        {
+            Label.setError("*");
+            container.setError("Both fields Should not contain ','");
+            return false;
+        }else if (textLabel.contains(","))
+        {
+            Label.setError("*");
+            container.setError("Should not contain ','");
+            return false;
+        }else if(!textLabel.isEmpty() && !textConatiner.isEmpty())
+        {
+            Label.setError(null);
+
+            container.setError(null);
+            return true;
+        }else
+        {
+            container.setError("Both fields must either be empty or filled ");
+            Label.setError("*");
+            return false;
+        }
+
+    }
+    private void DateCreated(String created)
+    {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'");
+        try {
+        Date date = format.parse(created);
+        DateFormat dateFormat = new SimpleDateFormat("dd LLLL yyyy");
+        String strDate = dateFormat.format(date);
+        creationDate.setText(strDate);
+    } catch (ParseException e) {
+        e.printStackTrace();
+    }
+
+    }
+
 
 }

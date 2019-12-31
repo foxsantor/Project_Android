@@ -161,12 +161,13 @@ public class myGarage_fragment extends Fragment {
                                     String other3 = hit.getString("other3");
                                     String tag_description = hit.getString("tag_description");
                                     String created = hit.getString("Created");
+                                    Float price = Float.parseFloat(hit.getString("Price"));
                                     String type = hit.getString("Type");
                                     String state = hit.getString("state");
                                     String images = hit.getString("String_image");
                                     String ref = hit.getString("refrence");
                                     byte[] decodedString = Base64.decode(images, Base64.DEFAULT);
-                                    mPartsList.add( new Parts(id,name,ref,other1,other2,other3,created,type,tag_description,decodedString,owner,state,StatusSell));
+                                    mPartsList.add( new Parts(id,name,ref,other1,other2,other3,created,type,tag_description,decodedString,owner,state,StatusSell,price));
                                 }
                                 adapter = new myPartsAdapter(getActivity(),mPartsList,new myPartsAdapter.OnClickedListner() {
                                     @Override
@@ -180,11 +181,12 @@ public class myGarage_fragment extends Fragment {
                                         data.putString("other2",mPartsList.get(pos).getOther2());
                                         data.putString("other3",mPartsList.get(pos).getOther3());
                                         data.putString("Type",mPartsList.get(pos).getType());
+                                        data.putFloat("Price",mPartsList.get(pos).getPrice());
                                         data.putByteArray("image",mPartsList.get(pos).getImage());
                                         data.putString("refrnce",mPartsList.get(pos).getRefrence());
                                         data.putString("tag_description",mPartsList.get(pos).getTag_desc());
                                         data.putString("Created",mPartsList.get(pos).getCreated());
-                                        Navigation.findNavController(getActivity(),R.id.nav_host_fragment).navigate(R.id.add_part_fragment,data);
+                                        Navigation.findNavController(getActivity(),R.id.nav_host_fragment).navigate(R.id.mypartView,data);
                                     }
                                 });
                                 mRecyclerView.setAdapter(adapter);
