@@ -742,7 +742,7 @@ public class User_account extends Fragment  {
                 if (ni.isConnected())
                     haveConnectedMobile = true;
         }
-        return haveConnectedWifi || haveConnectedMobile;
+        return haveConnectedWifi || haveConnectedMobile || MainActivity.getConnction();
     }
     private void DateModfied()
     {

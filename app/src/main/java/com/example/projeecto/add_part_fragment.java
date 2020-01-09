@@ -456,7 +456,7 @@ public class add_part_fragment extends Fragment  {
                             if(response.has("success")) {
 
                                 loading.setVisibility(View.GONE);
-                                Toast.makeText(getActivity(), " good job "+response.getString("success"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(),response.getString("success"), Toast.LENGTH_SHORT).show();
                                 //openDialogue();
                             }
                             else

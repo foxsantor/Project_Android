@@ -387,7 +387,7 @@
                         android:id="@+id/carview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="20dp"
                         app:cardBackgroundColor="@color/gray"
                         app:cardCornerRadius="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -401,9 +401,10 @@
                             app:cardCornerRadius="16dp">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
-                                android:focusable="true" android:focusableInTouchMode="true"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
                                 android:visibility="visible">
 
 

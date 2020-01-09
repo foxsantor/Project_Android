@@ -100,6 +100,23 @@ public class Parts {
         this.StatusSell =StatusSell;
         this.price = price;
     }
+    public Parts(int id, String name, String refrence, String other1, String other2, String other3, String created, String type, String tag_desc, byte[] image, String owner, String state,String StatusSell,Float price,String vues) {
+        this.id = id;
+        this.name = name;
+        this.refrence = refrence;
+        this.other1 = other1;
+        this.other2 = other2;
+        this.other3 = other3;
+        this.created = created;
+        this.vues = Integer.parseInt(vues);
+        Type = type;
+        this.tag_desc = tag_desc;
+        this.image = image;
+        this.owner = owner;
+        this.state = state;
+        this.StatusSell =StatusSell;
+        this.price = price;
+    }
 
     public Parts(String owner, String name, String refrence, String other1, String other2, String other3, String created, String ending_date, Float price, String type, String tag_desc, byte[]  image) {
         this.name = name;

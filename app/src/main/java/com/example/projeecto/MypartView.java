@@ -5,6 +5,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -83,7 +84,7 @@ public class MypartView extends Fragment {
     private ImageView container,dummy;
     private FloatingActionButton addImage,addImageCamera;
     private static final int GALLERY_REQUEST = 1;
-    private String base64Code,idparts,cateegory,o1,o2,o3,statusSell;
+    private String base64Code,idparts,cateegory,o1,o2,o3,statusSell,username;
     private static final int  MY_CAMERA_PERMISSION_CODE = 2;
     private static final int CAMERA_REQUEST=3;
     private static final String URL = MainActivity.SKELETON+"parts/updatePart";
@@ -97,7 +98,7 @@ public class MypartView extends Fragment {
     private Menu collapsedMenu;
     private CollapsingToolbarLayout collaspsing;
     private boolean appBarExpanded=true;
-    private static final String URL_GETSELL = MainActivity.SKELETON+"parts/getUsernameandComments";
+    private static final String URL_GETSELL = MainActivity.SKELETON+"comments/getUsernameandComments";
     private Button save,stateButton,refresh;
     private RequestQueue requestQueue;
     private Spinner category;
@@ -223,6 +224,11 @@ public class MypartView extends Fragment {
 
             name.getEditText().setText(data.getString("name"));
             statusSell = data.getString("Sell");
+            if(!statusSell.equals("YES")){
+                stateButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.orange));
+                stateButton.setText("Unsorted");
+            }
+            numberViews.setText(data.getString("vues"));
             idparts = data.getString("idparts");
             if(!data.getString("other1").isEmpty() || !data.getString("other1").equals("") ){
                 otherSets.setVisibility(View.VISIBLE);
@@ -232,6 +238,8 @@ public class MypartView extends Fragment {
             other1TextView = o1.split(",");
             other1x.getEditText().setText(other1TextView[0]);
             other1.getEditText().setText(other1TextView[1]);}
+
+
 
             if(!data.getString("other2").isEmpty()|| !data.getString("other2").equals("")){
                 otherSets.setVisibility(View.VISIBLE);
@@ -270,7 +278,8 @@ public class MypartView extends Fragment {
             byte[] image = data.getByteArray("image");
             Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
             Glide.with(getActivity()).asBitmap().load(bmp).into(container);
-
+            //getuseerComments(loadUsername(),Integer.parseInt(idparts));
+            getCommenyData(Integer.parseInt(idparts));
             /*Palette.from(bmp).generate(new Palette.PaletteAsyncListener() {
                 @Override
                 public void onGenerated(Palette palette) {
@@ -433,10 +442,14 @@ public class MypartView extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked)
                 {
+                    stateButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.green));
+                    stateButton.setText("Available");
                     sellView.setVisibility(View.VISIBLE);
 
                 }else
                 {
+                    stateButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.orange));
+                    stateButton.setText("Unsorted");
                     sellView.setVisibility(View.GONE);
                     Neutralize();
 
@@ -455,6 +468,7 @@ public class MypartView extends Fragment {
                         price.getEditText().requestFocus();
                         return false;}else{
                         AddSell();
+
                         return true;
                     }
                 }
@@ -674,6 +688,8 @@ public class MypartView extends Fragment {
                             if(response.has("success")) {
                                 //loading.setVisibility(View.GONE);
                                 Toast.makeText(getActivity(), ""+response.getString("success"), Toast.LENGTH_SHORT).show();
+                                stateButton.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.green));
+                                stateButton.setText("Available");
 
                             }
                         } catch (JSONException e) {
@@ -709,6 +725,7 @@ public class MypartView extends Fragment {
 
                         JSONObject hit = response.getJSONObject(i);
                         String nums = String.valueOf(hit.getInt("result"));
+                        Toast.makeText(getActivity(), nums, Toast.LENGTH_SHORT).show();
                         numberComments.setText(nums);
 
                     }
@@ -871,6 +888,65 @@ public class MypartView extends Fragment {
     } catch (ParseException e) {
         e.printStackTrace();
     }
+
+    }
+
+
+    public  String loadUsername()
+    {
+        SharedPreferences sharedPreferences=this.getActivity().getSharedPreferences("share", Context.MODE_PRIVATE);
+        username = sharedPreferences.getString("email","");
+        return username;
+    }
+
+    public  void getCommenyData(int id) {
+        username=loadUsername();
+        requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.start();
+
+        HashMap< String, String > params = new HashMap<String, String>();
+        params.put("username", username);
+        params.put("dealid", username);
+        // the entered data as the JSON body.
+        final JsonArrayRequest jsObjRequest = new
+                JsonArrayRequest(
+                Request.Method.POST,
+                URL_GETSELL,
+                new JSONObject(params),
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+
+
+                            if(response.length() > 0) {
+                                JSONObject jresponse = response.getJSONObject(0);
+                                      String numms=  jresponse.getString("result");
+                                numberComments.setText(numms);
+
+                                //mProgressBar.setVisibility(View.GONE);
+
+                            }else
+                            {
+                                Toast.makeText(getActivity(), "error retrieving data", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getActivity(), "Connection Lost "+error, Toast.LENGTH_LONG).show();
+                error.printStackTrace();
+
+            }
+        });
+
+        requestQueue.add(jsObjRequest);
+
+
 
     }
 

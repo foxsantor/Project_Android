@@ -28,12 +28,10 @@ tools:context=".SecondRow_Fragment">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/button_round"
             android:text="Register Now"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:backgroundTint="@color/DrakLord"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/agree" />
@@ -42,13 +40,13 @@ tools:context=".SecondRow_Fragment">
             android:id="@+id/confirm_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="20dp"
             app:errorEnabled="true"
             app:hintEnabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.4"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4">
+            app:layout_constraintTop_toBottomOf="@+id/password_r">
 
             <com.example.projeecto.tools.editText2
                 android:layout_width="match_parent"
@@ -65,8 +63,9 @@ tools:context=".SecondRow_Fragment">
             android:id="@+id/password_r"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="20dp"
             app:errorEnabled="true"
+            app:helperText="*must be at least 8 characters *must contain at least one digit *must contain at least one uppercase letter"
             app:hintEnabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -82,21 +81,6 @@ tools:context=".SecondRow_Fragment">
                 android:inputType="textPassword"
                 android:padding="16dp" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="249dp"
-            android:layout_height="76dp"
-            android:layout_marginStart="150dp"
-            android:layout_marginLeft="150dp"
-            android:text="*must be at least 8 characters                               *must contain at least one digit                              *must contain at least one uppercase letter"
-
-            android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/confirm_password"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password_r" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/Email"
@@ -124,7 +108,7 @@ tools:context=".SecondRow_Fragment">
             android:id="@+id/agree"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="20dp"
             android:text='I agree to recive offers from partners of ""'
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

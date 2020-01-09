@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,7 +44,8 @@ public class CategoryView extends Fragment {
 
     private RequestQueue requestQueue;
     private RecyclerView auction_ree,deals_ree;
-    private TextView cat_name;
+    private TextView cat_name,notfound;
+    private NestedScrollView nested;
     private String key ;
     private DealCatAdapter dealCatAdapter;
     private ArrayList<Parts> parts;
@@ -66,8 +68,14 @@ public class CategoryView extends Fragment {
          parts = new ArrayList<>();
          auction_ree = root.findViewById(R.id.auctionss);
          deals_ree = root.findViewById(R.id.deals_cat);
+         cat_name = root.findViewById(R.id.catname);
+         notfound = root.findViewById(R.id.notfound);
+        notfound.setVisibility(View.GONE);
+         nested = root.findViewById(R.id.nested);
+
          Bundle data = getArguments();
          key = data.getString("key","");
+         cat_name.setText(key);
          getDeals(key);
         return root;
     }
@@ -134,6 +142,7 @@ public class CategoryView extends Fragment {
 
                                     }
                                 });
+                                        nested.setVisibility(View.VISIBLE);
                                         deals_ree.setAdapter(dealCatAdapter);
                             }
                         } catch (JSONException e) {
@@ -144,7 +153,8 @@ public class CategoryView extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                nested.setVisibility(View.GONE);
+                notfound.setVisibility(View.VISIBLE);
                 error.printStackTrace();
                 return;
 

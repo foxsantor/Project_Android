@@ -3,6 +3,8 @@ package com.example.projeecto;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -50,15 +52,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.ocpsoft.prettytime.PrettyTime;
 
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+
 public class UserMenuFragment extends Fragment{
 
     private EmptyfragiViewModel mViewModel;
-    private Button persodata,myGarage;
+    private Button persodata,myGarage,chat;
     private RequestQueue requestQueue;
     private MaterialButton logout;
     private ConstraintLayout hider,lois ;
@@ -86,6 +93,7 @@ public class UserMenuFragment extends Fragment{
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs =  view.findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+        chat = view.findViewById(R.id.chat);
         myGarage = view.findViewById(R.id.myGarage);
         avatar2 = view.findViewById(R.id.avatar2);
         textView44 = view.findViewById(R.id.textView44);
@@ -118,6 +126,8 @@ public class UserMenuFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 removeAll();
+                removeAllUser();
+                checker = 0;
                 LoginManager.getInstance().logOut();
                 Navigation.findNavController(getView()).navigate(R.id.navigation_account);
             }
@@ -126,6 +136,14 @@ public class UserMenuFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(getView()).navigate(R.id.action_emptyfragi_to_myGarage_fragment);
+            }
+        });
+
+        chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(getActivity(),R.id.nav_host_fragment).navigate(R.id.liveChat2);
+
             }
         });
     }
@@ -149,6 +167,15 @@ public class UserMenuFragment extends Fragment{
     public void removeAll()
     {
         SharedPreferences sharedPreferences= getActivity().getSharedPreferences("share", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
+
+    }
+
+    public void removeAllUser()
+    {
+        SharedPreferences sharedPreferences= getActivity().getSharedPreferences("care", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.commit();
@@ -266,5 +293,81 @@ public class UserMenuFragment extends Fragment{
         }
         textView44.setText(MainActivity.capitalize(lastName_t)+" "+MainActivity.capitalize(firstName_t));
         avatar2.setText(lastName_t.toUpperCase().charAt(0)+"");
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        /*Bundle owna = getArguments();
+        owner = owna.getString("email");
+        fullname = owna.getString("Full_name");*/
+        socket.connect();
+        socket.on("message", handleIncomingMessages);
+        socket.on("identify",handler);
+        socket.on("chat message", handleIncomingMessages);
+        if (socket.connected()){
+            Toast.makeText(getActivity(), "Connected!!",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private Socket socket;
+    {
+        try{
+            socket = IO.socket("http://192.168.1.5:5000");
+        }catch(URISyntaxException e){
+            throw new RuntimeException(e);
+        }
+    }
+    private Emitter.Listener handleIncomingMessages = new Emitter.Listener(){
+        @Override
+        public void call(final Object... args){
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    String message;
+                    String username;
+                    //String imageText;
+                    try {
+                        message = data.getString("text").toString();
+                        username = data.getString("username").toString();
+
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(),"123")
+                                .setSmallIcon(R.drawable.ic_chat_bubble_outline_black_24dp)
+                                .setContentTitle(username)
+                                .setContentText(message)
+                                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
+                        notificationManager.notify(1, builder.build());
+
+                        //addMessage(message,username);
+
+                    } catch (JSONException e) {
+                        Toast.makeText(getActivity(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener handler = new Emitter.Listener(){
+        @Override
+        public void call(final Object... args){
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            });
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        socket.disconnect();
     }
 }

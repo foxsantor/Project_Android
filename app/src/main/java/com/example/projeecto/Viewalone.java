@@ -235,7 +235,8 @@ public class Viewalone extends Fragment {
             if(username.equals(data.getString("owner")))
             {
                 shopping.setVisibility(View.GONE);
-                edit.setVisibility(View.VISIBLE);
+                //edit.setVisibility(View.VISIBLE);
+                Contact.setVisibility(View.GONE);
             }
             idDeal = data.getInt("idparts", 0);
             getuseerComments(data.getString("owner"),idDeal);

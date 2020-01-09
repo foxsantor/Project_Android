@@ -80,6 +80,7 @@
                     android:text="Google"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
+                    android:visibility="gone"
                     app:backgroundTint="@color/DrakLord"
                     app:layout_constraintBottom_toTopOf="@+id/textView"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -113,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="50dp"
                     android:layout_marginLeft="50dp"
-                    android:layout_marginTop="80dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="50dp"
                     android:layout_marginRight="50dp"
                     android:layout_marginBottom="50dp"
@@ -191,7 +192,7 @@
                     android:layout_height="19dp"
                     android:layout_marginStart="155dp"
                     android:layout_marginLeft="155dp"
-                    android:layout_marginTop="176dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="158dp"
                     android:layout_marginRight="158dp"
                     android:text="NEW CUSTOMER ?"
@@ -200,7 +201,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.343"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/signin" />
+                    app:layout_constraintTop_toBottomOf="@+id/frami" />
 
                 <TextView
                     android:id="@+id/textView3"
@@ -213,7 +214,7 @@
                     android:layout_marginRight="254dp"
                     android:gravity="center"
                     android:text="Connection"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/DrakLord"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.6"
@@ -231,6 +232,7 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="8sp"
                     android:textStyle="bold"
+                    android:visibility="gone"
                     app:backgroundTint="@android:color/transparent"
                     app:layout_constraintBottom_toTopOf="@+id/signin"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -17,7 +17,7 @@ import com.example.projeecto.myGarage_fragment;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab1, R.string.tab2,R.string.tab3};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab1};
     private final Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
@@ -28,19 +28,12 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        if(position == 0)
-        {
+        if(position == 0) {
 
             return myGarage_fragment.newInstance();
-        }else if(position == 1)
-        {
-            return HomeFragment.newInstance();
-        }else if(position == 2)
-        {
-            return HomeFragment.newInstance();
         }else
         {
-            return HomeFragment.newInstance();
+            return myGarage_fragment.newInstance();
         }
     }
 
@@ -53,6 +46,6 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // Show 2 total pages.
-        return 3;
+        return 1;
     }
 }

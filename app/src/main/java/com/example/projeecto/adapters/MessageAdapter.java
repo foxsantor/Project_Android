@@ -82,7 +82,7 @@ public class MessageAdapter extends  RecyclerView.Adapter<MessageAdapter.ViewHol
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         //public ImageView mImageView;
-        public TextView myMessageView,theirMessageView,nameTheirs;
+        public TextView myMessageView,theirMessageView,nameTheirs,avatar;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -92,6 +92,7 @@ public class MessageAdapter extends  RecyclerView.Adapter<MessageAdapter.ViewHol
             nameTheirs = (TextView)itemView.findViewById(R.id.name);
             mine = itemView.findViewById(R.id.mymesg);
             theris = itemView.findViewById(R.id.theirs);
+            avatar = itemView.findViewById(R.id.avatar);
         }
         public void setMyMessage(String message){
             mine.setVisibility(View.VISIBLE);
@@ -115,6 +116,7 @@ public class MessageAdapter extends  RecyclerView.Adapter<MessageAdapter.ViewHol
             }
             theirMessageView.setText(message);
             nameTheirs.setText(username);
+            avatar.setText(""+username.toUpperCase().charAt(0));
         }
 
         /*public void setImage(Bitmap bmp){

@@ -10,6 +10,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -65,7 +67,7 @@ public class LiveChat extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String mParam1,username;
+    private String mParam1,username,owner,fullname;
     private String mParam2;
     private EditText mInputMessageView;
     private RecyclerView mMessagesView;
@@ -115,8 +117,12 @@ public class LiveChat extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*Bundle owna = getArguments();
+        owner = owna.getString("email");
+        fullname = owna.getString("Full_name");*/
         socket.connect();
         socket.on("message", handleIncomingMessages);
+        socket.on("identify",handler);
         socket.on("chat message", handleIncomingMessages);
         if (socket.connected()){
             Toast.makeText(getActivity(), "Connected!!",Toast.LENGTH_SHORT).show();
@@ -146,7 +152,7 @@ public class LiveChat extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        Iddentify();
         mMessagesView = (RecyclerView) view.findViewById(R.id.messageListView);
         mMessagesView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMessagesView.setAdapter(mAdapter);
@@ -170,6 +176,8 @@ public class LiveChat extends Fragment {
         JSONObject sendText = new JSONObject();
         try{
             sendText.put("text",message);
+            sendText.put("fullname",fullname);
+            sendText.put("owner",owner);
             sendText.put("username",username);
             socket.emit("message", sendText);
 
@@ -177,6 +185,16 @@ public class LiveChat extends Fragment {
 
         }
 
+    }
+
+    private void Iddentify(){
+        username=loadUsername();
+        JSONObject sendText = new JSONObject();
+        try{
+            sendText.put("username",username);
+            socket.emit("identify", sendText);
+
+        }catch(JSONException e){}
     }
 
     public void sendImage(String path)
@@ -193,10 +211,10 @@ public class LiveChat extends Fragment {
         }
     }
 
-    private void addMessage(String message ,String username) {
+    private void addMessage(String message ,String fullname) {
 
         mMessages.add(new Message.Builder(Message.TYPE_MESSAGE)
-                .message(message,username).build());
+                .message(message,fullname).build());
 
         mAdapter = new MessageAdapter( mMessages,getActivity());
         mAdapter.notifyItemInserted(0);
@@ -252,6 +270,16 @@ public class LiveChat extends Fragment {
                     try {
                         message = data.getString("text").toString();
                         username = data.getString("username").toString();
+
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(),"123")
+                                .setSmallIcon(R.drawable.ic_chat_bubble_outline_black_24dp)
+                                .setContentTitle(username)
+                                .setContentText(message)
+                                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
+                        notificationManager.notify(1, builder.build());
+
                         addMessage(message,username);
 
                     } catch (JSONException e) {
@@ -262,6 +290,19 @@ public class LiveChat extends Fragment {
             });
         }
     };
+
+    private Emitter.Listener handler = new Emitter.Listener(){
+        @Override
+        public void call(final Object... args){
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            });
+        }
+    };
+
 
     @Override
     public void onDetach() {
@@ -285,4 +326,6 @@ public class LiveChat extends Fragment {
         username = sharedPreferences.getString("email","");
         return username;
     }
+
+
 }

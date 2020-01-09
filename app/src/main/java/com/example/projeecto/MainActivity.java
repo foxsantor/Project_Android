@@ -1,5 +1,7 @@
 package com.example.projeecto;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -57,7 +59,7 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
     private String username = "";
     private NavHostFragment mNavHostFragment;
-    public static final String SKELETON = "http://192.168.1.4:5000/api/"; //"http://192.168.43.242:5000/api/";
+    public static final String SKELETON = "http://192.168.43.242:5000/api/"; //"http://192.168.43.242:5000/api/";
     private static final String URL = SKELETON;
     private static RequestQueue requestQueue;
     private ConstraintLayout container;
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         container = findViewById(R.id.container);
+        createNotificationChannel();
 
         conx = this;
         //Navigation
@@ -80,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_market_place, R.id.navigation_bookmarks, R.id.navigation_account, R.id.navigation_settings)
+                R.id.navigation_market_place, R.id.navigation_bookmarks, R.id.navigation_account)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
        // NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -182,6 +185,22 @@ public class MainActivity extends AppCompatActivity {
         });
         requestQueue.add(request);
         return hasConnection;
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "projecto";
+            String description = "description";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("123", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
 

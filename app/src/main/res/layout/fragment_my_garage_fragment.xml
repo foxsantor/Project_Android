@@ -3,32 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:fillViewport="true"
     android:isScrollContainer="false"
     tools:context=".myGarage_fragment">
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addpart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:isScrollContainer="true"
-        android:visibility="visible"
-        app:backgroundTint="#000000"
-        app:elevation="3dp"
-        app:fabSize="auto"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.954"
-        app:layout_constraintStart_toStartOf="parent"
-        app:maxImageSize="30dp"
-        app:rippleColor="@color/DrakLord"
-        app:srcCompat="@drawable/ic_add_black_24dp"
-        app:tint="@color/colorPrimary" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/loading_1"
@@ -75,8 +54,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bigView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -87,6 +67,7 @@
             android:layout_height="0dp"
             android:fillViewport="true"
             android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout">
@@ -104,6 +85,7 @@
                         android:id="@+id/myparts_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -111,15 +93,16 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/recyli"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:background="@color/colorPrimary"
                             android:paddingTop="15dp"
                             android:paddingBottom="5dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0"
                             tools:listitem="@layout/mypart_cardview" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -132,6 +115,7 @@
             android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
             android:padding="20dp"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
@@ -146,7 +130,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
                 android:background="@android:color/transparent"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -166,14 +150,35 @@
                 android:id="@+id/textDA"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"
                 android:text="My Parts"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/search_advance"
+                app:layout_constraintEnd_toStartOf="@+id/addpart"
                 app:layout_constraintStart_toStartOf="@+id/searchView2"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/addpart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:isScrollContainer="true"
+                android:visibility="visible"
+                app:backgroundTint="#000000"
+                app:elevation="3dp"
+                app:fabSize="mini"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:maxImageSize="30dp"
+                app:rippleColor="@color/DrakLord"
+                app:srcCompat="@drawable/ic_add_black_24dp"
+                app:tint="@color/colorPrimary" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

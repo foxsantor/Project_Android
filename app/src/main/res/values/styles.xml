@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/Accentov2</item>
+        <item name="colorPrimary">@color/loading</item>
         <item name="colorPrimaryDark">@color/Accentov2</item>
         <item name="colorAccent">@color/Accentov2</item>
         <item name="android:popupMenuStyle">@style/PopupMenu</item>

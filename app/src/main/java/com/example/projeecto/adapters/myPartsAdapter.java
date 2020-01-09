@@ -8,29 +8,42 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.projeecto.MainActivity;
 import com.example.projeecto.R;
 import com.example.projeecto.entities.Parts;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class myPartsAdapter extends RecyclerView.Adapter <myPartsAdapter.myPartsViewHolder> {
 
 private Context mContext;
 private ArrayList<Parts> myparts;
 private OnClickedListner lisnter;
+private RequestQueue requestQueue;
+
 
     public interface  OnClickedListner{
 
         void onClicked(int pos);
+        void downvVote2(View v, int position);
     }
 
     public void setOnItemClicked(OnClickedListner listner){
@@ -46,8 +59,8 @@ public myPartsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         }
 
 @Override
-public void onBindViewHolder(myPartsViewHolder holder, int position) {
-        Parts currentItem=  myparts.get(position);
+public void onBindViewHolder(myPartsViewHolder holder, final int position) {
+        final Parts currentItem=  myparts.get(position);
         //String imageUrl = currentItem.getImageUrl();
         String name = currentItem.getName();
         String type = currentItem.getType();
@@ -60,6 +73,7 @@ public void onBindViewHolder(myPartsViewHolder holder, int position) {
         Glide.with(mContext).asBitmap().load(image).into(holder.mImageView);
         holder.mTextViewName.setText(type);
     holder.mTextViewType.setText(MainActivity.capitalize(name));
+
         //holder.mImageView.setImageBitmap(bmp);
 
 
@@ -74,12 +88,14 @@ public int getItemCount() {
     public class myPartsViewHolder extends RecyclerView.ViewHolder {
     public ImageView mImageView;
     public TextView mTextViewName,mTextViewType;
+    public FloatingActionButton disable;
 
     public myPartsViewHolder(View itemView,final OnClickedListner listner) {
         super(itemView);
         mImageView = itemView.findViewById(R.id.imagemypart);
         mTextViewName = itemView.findViewById(R.id.namemypart);
         mTextViewType=itemView.findViewById(R.id.mypartType);
+        disable = itemView.findViewById(R.id.floatingActionButton);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +110,16 @@ public int getItemCount() {
                 }}
         });
 
+        disable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                lisnter.downvVote2(v, getAdapterPosition());
+                notifyItemChanged(getAdapterPosition());
+            }
+        });
+
+
     }
 
 }
@@ -107,6 +133,7 @@ public int getItemCount() {
         myparts = sells;
         this.lisnter=listener;
     }
+
 
 
 

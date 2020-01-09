@@ -116,10 +116,11 @@ public class ContactInterface extends Fragment  {
        chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle owner = new Bundle();
-                owner.putString("Full_name",fullName);
-                owner.putChar("first_Letter",lastname.toUpperCase().charAt(0));
-                Navigation.findNavController(getView()).navigate(R.id.action_contactInterface_to_liveChat2,owner);
+                Bundle owners = new Bundle();
+                owners.putString("email",owner);
+                owners.putString("Full_name",fullName);
+                owners.putChar("first_Letter",lastname.toUpperCase().charAt(0));
+                Navigation.findNavController(getView()).navigate(R.id.action_contactInterface_to_liveChat2,owners);
             }
         });
 

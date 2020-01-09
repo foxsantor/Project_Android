@@ -33,6 +33,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.projeecto.adapters.sellsAdapter;
 import com.example.projeecto.entities.Parts;
@@ -53,6 +54,7 @@ import java.util.HashMap;
  */
 public class myGarage_fragment extends Fragment {
     private static final String URL = MainActivity.SKELETON+"/parts/myparts" ;
+    final private static String URL_Disable = MainActivity.SKELETON+"parts/DeadParts";
     private String username;
     private RequestQueue requestQueue;
     private ConstraintLayout loadingBar,bigView;
@@ -161,19 +163,31 @@ public class myGarage_fragment extends Fragment {
                                     String other3 = hit.getString("other3");
                                     String tag_description = hit.getString("tag_description");
                                     String created = hit.getString("Created");
+                                    String vues = hit.getString("vues");
                                     Float price = Float.parseFloat(hit.getString("Price"));
                                     String type = hit.getString("Type");
                                     String state = hit.getString("state");
                                     String images = hit.getString("String_image");
                                     String ref = hit.getString("refrence");
                                     byte[] decodedString = Base64.decode(images, Base64.DEFAULT);
-                                    mPartsList.add( new Parts(id,name,ref,other1,other2,other3,created,type,tag_description,decodedString,owner,state,StatusSell,price));
+                                    mPartsList.add( new Parts(id,name,ref,other1,other2,other3,created,type,tag_description,decodedString,owner,state,StatusSell,price,vues));
                                 }
                                 adapter = new myPartsAdapter(getActivity(),mPartsList,new myPartsAdapter.OnClickedListner() {
+                                    @Override
+                                    public void downvVote2(View v, int position) {
+
+                                        Disabllecomment(mPartsList.get(position).getId());
+                                        adapter.notifyItemRemoved(position);
+                                        Navigation.findNavController(getActivity(),R.id.nav_host_fragment).navigate(R.id.emptyfragi);
+
+
+                                    }
+
                                     @Override
                                     public void onClicked(int pos) {
                                         Bundle data = new Bundle();
                                         data.putString("owner",mPartsList.get(pos).getOwner());
+                                        data.putString("vues",String.valueOf(mPartsList.get(pos).getVues()));
                                         data.putString("Sell",mPartsList.get(pos).getStatusSell());
                                         data.putString("idparts",String.valueOf(mPartsList.get(pos).getId()));
                                         data.putString("name",mPartsList.get(pos).getName());
@@ -228,5 +242,37 @@ public class myGarage_fragment extends Fragment {
 
         requestQueue.add(jsObjRequest);
     }
+    private void Disabllecomment(int commentid)
+    {
+
+        requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.start();
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("idpart", String.valueOf(commentid));
+        // the entered data as the JSON body.
+        JsonObjectRequest jsObjRequest = new
+                JsonObjectRequest(Request.Method.POST,
+                URL_Disable, new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        if (response.has("success")) {
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Toast.makeText(getActivity(), "Something went Wrong while Disabling", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        });
+
+        requestQueue.add(jsObjRequest);
+    }
+
 
 }

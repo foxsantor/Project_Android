@@ -117,6 +117,19 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView44" />
+
+                <Button
+                    android:id="@+id/chat"
+                    android:layout_width="75dp"
+                    android:layout_height="35dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="Chat"
+                    android:textSize="8sp"
+                    app:backgroundTint="@color/DrakLord"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/persodata" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
