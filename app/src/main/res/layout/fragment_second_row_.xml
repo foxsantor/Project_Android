@@ -48,7 +48,7 @@ tools:context=".SecondRow_Fragment">
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password_r">
 
-            <com.example.projeecto.tools.editText2
+            <com.localparts.projeecto.tools.editText2
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_edittext"
@@ -71,7 +71,7 @@ tools:context=".SecondRow_Fragment">
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Email">
 
-            <com.example.projeecto.tools.editText2
+            <com.localparts.projeecto.tools.editText2
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_edittext"
@@ -94,7 +94,7 @@ tools:context=".SecondRow_Fragment">
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.example.projeecto.tools.editText2
+            <com.localparts.projeecto.tools.editText2
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/style_edittext"

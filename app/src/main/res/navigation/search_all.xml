@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loadSearch"
-        android:name="com.example.projeecto.LoadSearch"
+        android:name="com.localparts.projeecto.LoadSearch"
         android:label="fragment_load_search"
         tools:layout="@layout/fragment_load_search" />
 </navigation>

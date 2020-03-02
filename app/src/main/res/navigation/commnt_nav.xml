@@ -6,7 +6,7 @@
     app:startDestination="@id/commentsection">
     <fragment
         android:id="@+id/commentsection"
-        android:name="com.example.projeecto.Commentsection"
+        android:name="com.localparts.projeecto.Commentsection"
         android:label="fragment_commentsection"
         tools:layout="@layout/fragment_commentsection" />
 </navigation>

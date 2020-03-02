@@ -6,7 +6,7 @@
     app:startDestination="@id/firstrowFragment">
     <fragment
         android:id="@+id/firstrowFragment"
-        android:name="com.example.projeecto.firstrowFragment"
+        android:name="com.localparts.projeecto.firstrowFragment"
         android:label="fragment_firstrow"
         tools:layout="@layout/fragment_firstrow" >
         <action
@@ -16,7 +16,7 @@
 
     <fragment
         android:id="@+id/secondRow_Fragment"
-        android:name="com.example.projeecto.SecondRow_Fragment"
+        android:name="com.localparts.projeecto.SecondRow_Fragment"
         android:label="fragment_second_row_"
         tools:layout="@layout/fragment_second_row_" />
 

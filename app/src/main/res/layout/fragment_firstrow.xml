@@ -52,7 +52,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lastname_r">
 
-                <com.example.projeecto.tools.editText2
+                <com.localparts.projeecto.tools.editText2
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/style_edittext"
@@ -62,7 +62,7 @@
                     android:padding="16dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.example.projeecto.tools.editText2
+            <com.localparts.projeecto.tools.editText2
                 android:id="@+id/address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.4"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mobile" />
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/lastname_r"
@@ -89,7 +89,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/firstname">
 
-                <com.example.projeecto.tools.editText2
+                <com.localparts.projeecto.tools.editText2
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/style_edittext"
@@ -110,7 +110,7 @@
                 app:layout_constraintHorizontal_bias="0.4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view">
-            <com.example.projeecto.tools.editText2
+            <com.localparts.projeecto.tools.editText2
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/error_selector"
@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
                 android:gravity="center|center_horizontal"

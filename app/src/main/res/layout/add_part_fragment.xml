@@ -668,8 +668,8 @@
 
                                     <ImageButton
                                         android:id="@+id/seealone"
-                                        android:layout_height="0dp"
                                         android:layout_width="0dp"
+                                        android:layout_height="0dp"
                                         android:background="@android:color/transparent"
                                         android:src="@android:drawable/ic_menu_camera"
                                         app:layout_constraintBottom_toBottomOf="parent"
@@ -679,8 +679,8 @@
 
                                     <ImageButton
                                         android:id="@+id/addImage"
-                                        android:layout_height="0dp"
                                         android:layout_width="0dp"
+                                        android:layout_height="0dp"
                                         android:background="@android:color/transparent"
                                         android:src="@android:drawable/ic_menu_gallery"
                                         app:layout_constraintBottom_toBottomOf="parent"

@@ -28,7 +28,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.example.projeecto.tools.editText2
+                <com.localparts.projeecto.tools.editText2
                     android:id="@+id/price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
                             app:layout_constraintEnd_toStartOf="@+id/textView20"
                             app:layout_constraintStart_toStartOf="parent">
 
-                            <com.example.projeecto.tools.editText2
+                            <com.localparts.projeecto.tools.editText2
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/editblend"
@@ -134,7 +134,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent">
 
-                            <com.example.projeecto.tools.editText2
+                            <com.localparts.projeecto.tools.editText2
                                 android:layout_width="200dp"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/editblend"
@@ -199,7 +199,7 @@
                             app:layout_constraintEnd_toStartOf="@+id/textView21"
                             app:layout_constraintStart_toStartOf="parent">
 
-                            <com.example.projeecto.tools.editText2
+                            <com.localparts.projeecto.tools.editText2
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/editblend"
@@ -222,7 +222,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent">
 
-                            <com.example.projeecto.tools.editText2
+                            <com.localparts.projeecto.tools.editText2
                                 android:layout_width="200dp"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/editblend"
@@ -287,7 +287,7 @@
                             app:layout_constraintEnd_toStartOf="@+id/textView23"
                             app:layout_constraintStart_toStartOf="parent">
 
-                            <com.example.projeecto.tools.editText2
+                            <com.localparts.projeecto.tools.editText2
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/editblend"
@@ -310,7 +310,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent">
 
-                            <com.example.projeecto.tools.editText2
+                            <com.localparts.projeecto.tools.editText2
                                 android:layout_width="200dp"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/editblend"
@@ -355,7 +355,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <com.example.projeecto.tools.editText2
+                    <com.localparts.projeecto.tools.editText2
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/editblend"
@@ -383,7 +383,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/name">
 
-                    <com.example.projeecto.tools.editText2
+                    <com.localparts.projeecto.tools.editText2
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/editblend"

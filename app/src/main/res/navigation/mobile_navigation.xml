@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_bookmarks"
-        android:name="com.example.projeecto.ui.home.HomeFragment"
+        android:name="com.localparts.projeecto.ui.home.HomeFragment"
         android:label="@string/title_bookmarks"
         tools:layout="@layout/fragment_bookmarks">
 
@@ -16,7 +16,7 @@
 
     <fragment
         android:id="@+id/navigation_account"
-        android:name="com.example.projeecto.ui.dashboard.AuthenticationFragment"
+        android:name="com.localparts.projeecto.ui.dashboard.AuthenticationFragment"
         android:label="@string/title_account"
         tools:layout="@layout/fragment_dashboard">
         <action
@@ -30,18 +30,18 @@
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.example.projeecto.ui.home.HomeFragment"
+        android:name="com.localparts.projeecto.ui.home.HomeFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_bookmarks">
     </fragment>
     <fragment
         android:id="@+id/user_account"
-        android:name="com.example.projeecto.User_account"
+        android:name="com.localparts.projeecto.User_account"
         android:label="user_account_fragment"
         tools:layout="@layout/user_account_fragment" />
     <fragment
         android:id="@+id/emptyfragi"
-        android:name="com.example.projeecto.UserMenuFragment"
+        android:name="com.localparts.projeecto.UserMenuFragment"
         android:label="emptyfragi_fragment"
         tools:layout="@layout/emptyfragi_fragment" >
         <action
@@ -58,17 +58,17 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment_1"
-        android:name="com.example.projeecto.RegisterFragment_1"
+        android:name="com.localparts.projeecto.RegisterFragment_1"
         android:label="fragment_register_fragment_1"
         tools:layout="@layout/fragment_register_fragment_1" />
     <fragment
         android:id="@+id/add_part_fragment"
-        android:name="com.example.projeecto.add_part_fragment"
+        android:name="com.localparts.projeecto.add_part_fragment"
         android:label="add_part_fragment"
         tools:layout="@layout/add_part_fragment" />
     <fragment
         android:id="@+id/myGarage_fragment"
-        android:name="com.example.projeecto.myGarage_fragment"
+        android:name="com.localparts.projeecto.myGarage_fragment"
         android:label="fragment_my_garage_fragment"
         tools:layout="@layout/fragment_my_garage_fragment" >
         <action
@@ -80,17 +80,17 @@
     </fragment>
     <fragment
         android:id="@+id/mypartView"
-        android:name="com.example.projeecto.MypartView"
+        android:name="com.localparts.projeecto.MypartView"
         android:label="fragment_mypart_view"
         tools:layout="@layout/fragment_mypart_view" />
     <fragment
         android:id="@+id/navigation_market_place"
-        android:name="com.example.projeecto.HomeFragmment"
+        android:name="com.localparts.projeecto.HomeFragmment"
         android:label="@string/title_home"
         tools:layout="@layout/home_fragmment"/>
     <fragment
         android:id="@+id/viewalone"
-        android:name="com.example.projeecto.Viewalone"
+        android:name="com.localparts.projeecto.Viewalone"
         android:label="fragment_viewalone"
         tools:layout="@layout/fragment_viewalone" >
         <action
@@ -99,12 +99,12 @@
     </fragment>
     <fragment
         android:id="@+id/liveChat2"
-        android:name="com.example.projeecto.LiveChat"
+        android:name="com.localparts.projeecto.LiveChat"
         android:label="fragment_live_chat"
         tools:layout="@layout/fragment_live_chat" />
     <fragment
         android:id="@+id/contactInterface"
-        android:name="com.example.projeecto.ContactInterface"
+        android:name="com.localparts.projeecto.ContactInterface"
         android:label="fragment_contact_interface"
         tools:layout="@layout/fragment_contact_interface" >
         <action
@@ -113,12 +113,12 @@
     </fragment>
     <fragment
         android:id="@+id/categoryView"
-        android:name="com.example.projeecto.CategoryView"
+        android:name="com.localparts.projeecto.CategoryView"
         android:label="fragment_category_view"
         tools:layout="@layout/fragment_category_view" />
     <fragment
         android:id="@+id/viewAll"
-        android:name="com.example.projeecto.viewAll"
+        android:name="com.localparts.projeecto.viewAll"
         android:label="fragment_view_all"
         tools:layout="@layout/fragment_view_all" />
 

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/myGarage_fragment2"
-        android:name="com.example.projeecto.myGarage_fragment"
+        android:name="com.localparts.projeecto.myGarage_fragment"
         android:label="fragment_my_garage_fragment"
         tools:layout="@layout/fragment_my_garage_fragment" />
 </navigation>

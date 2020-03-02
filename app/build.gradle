@@ -8,7 +8,7 @@ android {
     defaultConfig {
 
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
-        applicationId "com.example.projeecto"
+        applicationId "com.localparts.projeecto"
         minSdkVersion 15
         targetSdkVersion 29
         versionCode 1
@@ -19,6 +19,12 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
     }
     buildTypes {
         release {
